@@ -1,28 +1,18 @@
 /**
- * Nam Nguyen
- * 15/03/2017
- *
- * Player abstract class
- *
+ * Created by Nam Nguyen on 15/03/2017.
  */
-public abstract class Player
-{
-
+public class Obstacle {
     private float x_pos;
     private float y_pos;
 
-    private int numLegalMove;
-
-    public Player(){
+    public Obstacle(){
         this.x_pos = 0;
         this.y_pos = 0;
-        numLegalMove = 4;
     }
 
-    public Player(float x, float y){
+    public Obstacle(float x, float y){
         this.x_pos = x;
         this.y_pos = y;
-        numLegalMove = 4;
     }
 
     public float getX_pos() {
@@ -41,9 +31,4 @@ public abstract class Player
         this.y_pos = y_pos;
     }
 
-    public abstract void move();
-
-    public void setDir(Board curState){
-        //change booleans
-    }
 }
