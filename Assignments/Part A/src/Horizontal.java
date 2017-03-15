@@ -1,7 +1,15 @@
 /**
  * Created by ammar on 3/15/17.
  */
-public class Horizontal
+public abstract class Player
 {
-    // need to implement
+    private float x_pos;
+	private float y_pos;
+	
+	public Player(float x, float y){
+		x_pos = x;
+		y_pos = y;
+	}
+	
+	public abstract move();
 }
