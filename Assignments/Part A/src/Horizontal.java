@@ -3,5 +3,5 @@
  */
 public class Horizontal
 {
-    // need to implement
+    // public static legalMoves =
 }
