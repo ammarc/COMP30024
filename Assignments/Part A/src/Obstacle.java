@@ -31,4 +31,8 @@ public class Obstacle {
         this.y_pos = y_pos;
     }
 
+    public String toString ()
+    {
+        return "B";
+    }
 }

@@ -11,18 +11,18 @@ public abstract class Player
     private float x_pos;
     private float y_pos;
 
-    private int numLegalMove;
+    private int numLegalMoves;
 
     public Player(){
         this.x_pos = 0;
         this.y_pos = 0;
-        numLegalMove = 4;
+        numLegalMoves = 4;
     }
 
     public Player(float x, float y){
         this.x_pos = x;
         this.y_pos = y;
-        numLegalMove = 4;
+        numLegalMoves = 4;
     }
 
     public float getX_pos() {
@@ -46,4 +46,6 @@ public abstract class Player
     public void setDir(Board curState){
         //change booleans
     }
+
+
 }

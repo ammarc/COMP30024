@@ -20,4 +20,9 @@ public class Vertical extends Player{
     public void move(){
         //do something
     }
+
+    public String toString ()
+    {
+        return "V";
+    }
 }

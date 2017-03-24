@@ -3,15 +3,12 @@
  */
 
 
-
 public class Game
 {
-    private int n;
-
-    public void setN (int n) { this.n = n;}
-
     public static void main (String args[])
     {
-        Environment environment = new Environment();
+        Board board = new Board();
+        board.printBoard();
     }
 }
+

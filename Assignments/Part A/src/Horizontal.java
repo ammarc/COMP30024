@@ -1,7 +1,8 @@
 /**
  * Created by Nam Nguyen on 15/03/2017.
  */
-public class Horizontal extends Player{
+public class Horizontal extends Player
+{
 
     public static final boolean LEFT = false;
     private boolean RIGHT = true;
@@ -19,5 +20,10 @@ public class Horizontal extends Player{
     @Override
     public void move(){
         //do something
+    }
+
+    public String toString ()
+    {
+        return "H";
     }
 }
