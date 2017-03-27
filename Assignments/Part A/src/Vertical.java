@@ -1,28 +1,30 @@
 /**
  * Created by Nam Nguyen on 15/03/2017.
  */
-public class Vertical extends Player{
+public class Vertical extends Piece
+{
 
-    private boolean LEFT = true;
-    private boolean RIGHT = true;
-    private boolean DOWN = false;
-    public static final boolean UP = true;
+    public final boolean DOWN = false;
+    private boolean RIGHT = false;
+    private boolean LEFT = false;
+    private boolean UP = false;
 
-    public Vertical(){
-        super();
-    }
-
-    public Vertical(float x, float y){
+    public Vertical(float x, float y)
+    {
         super(x,y);
     }
 
     @Override
-    public void move(){
+    public void move()
+    {
         //do something
     }
 
-    public String toString ()
-    {
-        return "V";
-    }
+    public void setRightFalse () { this.RIGHT = false; }
+    public void setLeftFalse () { this.LEFT = false; }
+    public void setUpFalse () { this.UP = false; }
+
+    public void setRightTrue () { this.RIGHT = true; }
+    public void setLeftTrue () { this.LEFT = true; }
+    public void setUpTrue () { this.UP = true; }
 }

@@ -5,24 +5,17 @@
  * Player abstract class
  *
  */
-public abstract class Player
+public abstract class Piece
 {
-
     private float x_pos;
     private float y_pos;
 
-    private int numLegalMoves;
+    private int numLegalMoves = 0;
 
-    public Player(){
-        this.x_pos = 0;
-        this.y_pos = 0;
-        numLegalMoves = 4;
-    }
-
-    public Player(float x, float y){
+    public Piece(float x, float y)
+    {
         this.x_pos = x;
         this.y_pos = y;
-        numLegalMoves = 4;
     }
 
     public float getX_pos() {
@@ -33,7 +26,8 @@ public abstract class Player
         this.x_pos = x_pos;
     }
 
-    public float getY_pos() {
+    public float getY_pos()
+    {
         return y_pos;
     }
 
@@ -43,9 +37,13 @@ public abstract class Player
 
     public abstract void move();
 
-    public void setDir(Board curState){
+    public void setDir (Board curState)
+    {
         //change booleans
     }
 
+    public void updateNumLegalMoves ()
+    {
 
+    }
 }

@@ -2,14 +2,14 @@
  * Created by ammar on 3/15/17.
  */
 
-import jdk.internal.dynalink.ChainedCallSite;
-
-import java.util.Scanner;
+import java.util.ArrayList;
 
 public class Board
 {
     private int n;
-    private Object[][] board;
+    private String[] board;
+    private ArrayList<Piece> horizontalPieces = new ArrayList<>();
+    private ArrayList<Piece> verticalPieces = new ArrayList<>();
 
     public void setN(int n)
     {
@@ -20,46 +20,44 @@ public class Board
         return this.n;
     }
 
-    public Object[][] getBoard() {
+    public String[] getBoard() {
         return this.board;
     }
 
-    public Board ()
+    public Board (String[] boardArray)
     {
+        this.board = boardArray;
+    }
 
-        Scanner in = new Scanner(System.in);
-
-        this.n = in.nextInt();
-
-        in.nextLine();
-
-        this.board = new Object[this.n][this.n];
-
-        for (int i = this.n - 1; i >= 0; i--)
+    public void setUpBoard ()
+    {
+        for (int i = 0; i < n; i++)
         {
-
-
-            // rawInput = rawInput.replaceAll("\\s", "");
-
-            for (int j = 0; j < this.n; j++)
+            int j = 0;
+            for (char c : board[i].toCharArray())
             {
-                String rawInput = in.next();
-
-                switch (rawInput)
+                if (c == 'H')
                 {
-                    case "H":
-                        board[i][j] = new Horizontal(i, j);
-                        break;
-                    case "V":
-                        board[i][j] = new Vertical(i, j);
-                        break;
-                    case "+":
-                        board[i][j] = new String (rawInput);
-                        break;
-                    case "B":
-                        board[i][j] = new Obstacle(i, j);
-                        break;
+                    Horizontal horizontal = new Horizontal(i, j);
+                    // Look up
+                    if (i < n && board[i+1].toCharArray()[j] == '+') { horizontal.setUpTrue(); }
+                    // Look right
+                    if (i == n || board[i].toCharArray()[j+1] == '+') { horizontal.setRightTrue(); }
+                    // Look down
+                    if (i >= 0 && board[i-1].toCharArray()[j] == '+') { horizontal.setDownTrue(); }
                 }
+
+                if (c == 'V')
+                {
+                    Vertical vertical = new Vertical(i, j);
+                    // Look up
+                    if (i == n || board[i+1].toCharArray()[j] == '+') { vertical.setUpTrue(); }
+                    // Look right
+                    if (i < n && board[i].toCharArray()[j+1] == '+') { vertical.setRightTrue(); }
+                    // Look left
+                    if (i >= 0 && board[i].toCharArray()[j-1] == '+') { vertical.setLeftTrue(); }
+                }
+                j++;
             }
         }
     }
@@ -74,9 +72,9 @@ public class Board
         System.out.println();
         for (int i = 0; i < this.n; i++)
         {
-            for (int j = 0; j < this.n; j++)
+            for (char c : board[i].toCharArray())
             {
-                System.out.print(board[i][j]);
+                System.out.print(c);
                 System.out.print(" ");
             }
             System.out.println();
