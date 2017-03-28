@@ -7,9 +7,10 @@ import java.util.ArrayList;
 public class Board
 {
     private int n;
-    private String[] board;
-    private ArrayList<Piece> horizontalPieces = new ArrayList<>();
-    private ArrayList<Piece> verticalPieces = new ArrayList<>();
+    private ArrayList<String[]> board;
+    private ArrayList<Piece> horizontalPieces = new ArrayList<Piece>();
+    private ArrayList<Piece> verticalPieces = new ArrayList<Piece>();
+    private ArrayList<Obstacle> obstacles = new ArrayList<Obstacle>();
 
     public void setN(int n)
     {
@@ -20,11 +21,11 @@ public class Board
         return this.n;
     }
 
-    public String[] getBoard() {
+    public ArrayList<String[]> getBoard() {
         return this.board;
     }
 
-    public Board (String[] boardArray)
+    public Board (ArrayList<String[]> boardArray)
     {
         this.board = boardArray;
     }
@@ -34,32 +35,77 @@ public class Board
         for (int i = 0; i < n; i++)
         {
             int j = 0;
-            for (char c : board[i].toCharArray())
+            for (String c : board.get(i))
             {
-                if (c == 'H')
+                if (c.equals('H'))
                 {
                     Horizontal horizontal = new Horizontal(i, j);
-                    // Look up
-                    if (i < n && board[i+1].toCharArray()[j] == '+') { horizontal.setUpTrue(); }
-                    // Look right
-                    if (i == n || board[i].toCharArray()[j+1] == '+') { horizontal.setRightTrue(); }
                     // Look down
-                    if (i >= 0 && board[i-1].toCharArray()[j] == '+') { horizontal.setDownTrue(); }
+                    if (i < n && board.get(i+1)[j].equals('+')) { horizontal.setUpTrue(); }
+                    // Look right
+                    if (j < n && board.get(i)[j+1].equals('+')) { horizontal.setRightTrue(); }
+                    // Look up
+                    if (i >= 0 && board.get(i-1)[j].equals('+')) { horizontal.setDownTrue(); }
+
+                    horizontalPieces.add(horizontal);
                 }
 
-                if (c == 'V')
+                if (c.equals('V'))
                 {
                     Vertical vertical = new Vertical(i, j);
-                    // Look up
-                    if (i == n || board[i+1].toCharArray()[j] == '+') { vertical.setUpTrue(); }
+                    // Look down
+                    if (i == n || board.get(i+1)[j].equals('+')) { vertical.setUpTrue(); }
                     // Look right
-                    if (i < n && board[i].toCharArray()[j+1] == '+') { vertical.setRightTrue(); }
+                    if (j < n && board.get(i)[j+1].equals('+')) { vertical.setRightTrue(); }
                     // Look left
-                    if (i >= 0 && board[i].toCharArray()[j-1] == '+') { vertical.setLeftTrue(); }
+                    if (j > 0 && board.get(i)[j-1].equals('+')) { vertical.setLeftTrue(); }
+
+                    verticalPieces.add(vertical);
+                }
+
+                if (c.equals('B'))
+                {
+                    Obstacle obs = new Obstacle(i,j);
+                    obstacles.add(obs);
                 }
                 j++;
             }
         }
+    }
+
+    public String[] getNeighborCells(int x, int y){
+        //get neighbor cells, in following order: Left, Right, Up, Down
+        String[] neighbors = new String[4];
+
+        if (y>0){
+            neighbors[0] = board.get(x)[y-1];
+        }
+        else {
+            neighbors[0] = "";
+        }
+
+        if (y<n){
+            neighbors[1] = board.get(x)[y+1];
+        }
+        else {
+            neighbors[1] = "";
+        }
+
+        if (x>0){
+            neighbors[2] = board.get(x-1)[y];
+        }
+        else {
+            neighbors[2] = "";
+        }
+
+        if (x<n){
+            neighbors[3] = board.get(x+1)[y];
+        }
+        else {
+            neighbors[3] = "";
+        }
+
+        return neighbors;
     }
 
     public void printBoard ()
@@ -72,7 +118,7 @@ public class Board
         System.out.println();
         for (int i = 0; i < this.n; i++)
         {
-            for (char c : board[i].toCharArray())
+            for (String c : board.get(i))
             {
                 System.out.print(c);
                 System.out.print(" ");
@@ -81,6 +127,26 @@ public class Board
         }
         System.out.println();
         System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~");
+    }
+
+    public int numLegalHMoves(){
+        int count = 0;
+
+        for( Piece p : horizontalPieces){
+            count += p.numLegalMoves(this);
+        }
+
+        return count;
+    }
+
+    public int numLegalVMoves(){
+        int count = 0;
+
+        for( Piece p : verticalPieces){
+            count += p.numLegalMoves(this);
+        }
+
+        return count;
     }
 }
 

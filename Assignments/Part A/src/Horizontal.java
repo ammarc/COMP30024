@@ -3,17 +3,28 @@
  */
 public class Horizontal extends Piece
 {
-
-    public final boolean LEFT = false;
-    private boolean RIGHT = false;
-    private boolean DOWN = false;
-    private boolean UP = false;
-
-
-    public Horizontal(float x, float y)
+    public Horizontal(int x, int y)
     {
         super(x,y);
+    }
 
+    @Override
+    public int numLegalMoves(Board board){
+        int count = 0;
+        String[] neighbors = board.getNeighborCells(this.getX_pos(), this.getY_pos());
+
+        //doesn't check left direction
+        for(int i = 1; i < neighbors.length; i++){
+            if(neighbors[i].equals("+")){
+                count++;
+                setDirection(i, true);
+            }
+            else {
+                setDirection(i, false);
+            }
+        }
+
+        return count;
     }
 
     @Override
@@ -21,12 +32,4 @@ public class Horizontal extends Piece
     {
         //do something
     }
-
-    public void setRightFalse () { this.RIGHT = false; }
-    public void setDonwFalse () { this.DOWN = false; }
-    public void setUpFalse () { this.UP = false; }
-
-    public void setRightTrue () { this.RIGHT = true; }
-    public void setDownTrue () { this.DOWN = true; }
-    public void setUpTrue () { this.UP = true; }
 }

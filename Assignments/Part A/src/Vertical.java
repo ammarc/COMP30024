@@ -4,27 +4,32 @@
 public class Vertical extends Piece
 {
 
-    public final boolean DOWN = false;
-    private boolean RIGHT = false;
-    private boolean LEFT = false;
-    private boolean UP = false;
-
-    public Vertical(float x, float y)
+    public Vertical(int x, int y)
     {
         super(x,y);
     }
 
     @Override
-    public void move()
-    {
+    public void move() {
         //do something
     }
 
-    public void setRightFalse () { this.RIGHT = false; }
-    public void setLeftFalse () { this.LEFT = false; }
-    public void setUpFalse () { this.UP = false; }
+    @Override
+    public int numLegalMoves(Board board){
+        int count = 0;
+        String[] neighbors = board.getNeighborCells(this.getX_pos(), this.getY_pos());
 
-    public void setRightTrue () { this.RIGHT = true; }
-    public void setLeftTrue () { this.LEFT = true; }
-    public void setUpTrue () { this.UP = true; }
+        //doesn't check down direction
+        for(int i = 0; i < neighbors.length - 1; i++){
+            if(neighbors[i].equals("+")){
+                count++;
+                setDirection(i, true);
+            }
+            else {
+                setDirection(i, false);
+            }
+        }
+
+        return count;
+    }
 }
