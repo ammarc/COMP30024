@@ -37,33 +37,33 @@ public class Board
             int j = 0;
             for (String c : board.get(i))
             {
-                if (c.equals('H'))
+                if (c.equals("H"))
                 {
                     Horizontal horizontal = new Horizontal(i, j);
                     // Look down
-                    if (i < n && board.get(i+1)[j].equals('+')) { horizontal.setUpTrue(); }
+                    if (i < (n-1) && board.get(i+1)[j].equals("+")) { horizontal.setUpTrue(); }
                     // Look right
-                    if (j < n && board.get(i)[j+1].equals('+')) { horizontal.setRightTrue(); }
+                    if (j < (n-1) && board.get(i)[j+1].equals("+")) { horizontal.setRightTrue(); }
                     // Look up
-                    if (i >= 0 && board.get(i-1)[j].equals('+')) { horizontal.setDownTrue(); }
+                    if (i > 0 && board.get(i-1)[j].equals("+")) { horizontal.setDownTrue(); }
 
                     horizontalPieces.add(horizontal);
                 }
 
-                if (c.equals('V'))
+                if (c.equals("V"))
                 {
                     Vertical vertical = new Vertical(i, j);
-                    // Look down
-                    if (i == n || board.get(i+1)[j].equals('+')) { vertical.setUpTrue(); }
+                    // Look up
+                    if (i > 0 || board.get(i-1)[j].equals("+")) { vertical.setUpTrue(); }
                     // Look right
-                    if (j < n && board.get(i)[j+1].equals('+')) { vertical.setRightTrue(); }
+                    if (j < (n-1) && board.get(i)[j+1].equals("+")) { vertical.setRightTrue(); }
                     // Look left
-                    if (j > 0 && board.get(i)[j-1].equals('+')) { vertical.setLeftTrue(); }
+                    if (j > 0 && board.get(i)[j-1].equals("+")) { vertical.setLeftTrue(); }
 
                     verticalPieces.add(vertical);
                 }
 
-                if (c.equals('B'))
+                if (c.equals("B"))
                 {
                     Obstacle obs = new Obstacle(i,j);
                     obstacles.add(obs);
@@ -84,7 +84,7 @@ public class Board
             neighbors[0] = "";
         }
 
-        if (y<n){
+        if (y<n-1){
             neighbors[1] = board.get(x)[y+1];
         }
         else {
@@ -98,7 +98,7 @@ public class Board
             neighbors[2] = "";
         }
 
-        if (x<n){
+        if (x<n-1){
             neighbors[3] = board.get(x+1)[y];
         }
         else {
@@ -127,6 +127,7 @@ public class Board
         }
         System.out.println();
         System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~");
+
     }
 
     public int numLegalHMoves(){

@@ -20,7 +20,7 @@ public class Vertical extends Piece
         String[] neighbors = board.getNeighborCells(this.getX_pos(), this.getY_pos());
 
         //doesn't check down direction
-        for(int i = 0; i < neighbors.length - 1; i++){
+        for(int i = 0; i < neighbors.length-1; i++){
             if(neighbors[i].equals("+")){
                 count++;
                 setDirection(i, true);
