@@ -2,7 +2,7 @@ package athena;
 
 /**
  * Made by Ammar Ahmed and Nam Nguyen
- * Student IDs: Ammar 728926, Nam
+ * User-names: Ammar: ammara , Nam
  * For COMP30024 Part A
  */
 

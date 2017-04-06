@@ -56,7 +56,6 @@ public class Game
      */
     public static void initializeArrayList (ArrayList arrayList, int size)
     {
-        System.out.println("Array size is: " + arrayList.size());
         for (int i = 0; i < size; i++)
         {
             arrayList.add (i, null);
