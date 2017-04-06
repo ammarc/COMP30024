@@ -83,66 +83,6 @@ public class Board
         }
     }
 
-    /*
-    public String[] getNeighborCells(int x, int y){
-        //get neighbor cells, in following order: Left, Right, Up, Down
-        String[] neighbors = new String[4];
-
-        if (y>0){
-            neighbors[0] = board.get(x)[y-1];
-        }
-        else {
-            neighbors[0] = "";
-        }
-
-        if (y<n-1){
-            neighbors[1] = board.get(x)[y+1];
-        }
-        else {
-            neighbors[1] = "";
-        }
-
-        if (x>0){
-            neighbors[2] = board.get(x-1)[y];
-        }
-        else {
-            neighbors[2] = "";
-        }
-
-        if (x<n-1){
-            neighbors[3] = board.get(x+1)[y];
-        }
-        else {
-            neighbors[3] = "";
-        }
-
-        return neighbors;
-    }
-
-    */
-    /*
-    public void printBoard ()
-    {
-        System.out.println();
-
-        System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~");
-        System.out.println("The board is:");
-
-        System.out.println();
-        for (int i = 0; i < this.n; i++)
-        {
-            for (String c : board.get(i))
-            {
-                System.out.print(c);
-                System.out.print(" ");
-            }
-            System.out.println();
-        }
-        System.out.println();
-        System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~");
-
-    }
-    */
     /**
      * Calculates the number of total horizontal legal moves
      * by first setting them for the piece and adding it to total

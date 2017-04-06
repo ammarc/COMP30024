@@ -18,24 +18,4 @@ public class Horizontal extends Piece
     {
         super(x,y);
     }
-
-    /*@Override
-    public int numLegalMoves(athena.Board board){
-        int count = 0;
-        String[] neighbors = board.getNeighborCells(this.getxPos(), this.getyPos());
-
-        //doesn't check left direction
-        for(int i = 1; i < neighbors.length; i++){
-            if(neighbors[i].equals("+")){
-                count++;
-                setDirection(i, true);
-            }
-            else {
-                setDirection(i, false);
-            }
-        }
-
-        return count;
-    }
-    */
 }
