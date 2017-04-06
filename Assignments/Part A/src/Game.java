@@ -1,7 +1,7 @@
 /**
  * Made by Ammar Ahmed and Nam Nguyen
- * Student IDs: Ammar 728926, Nam
- * User names: Ammar - amamra, Nam -
+ * Student IDs: Ammar 728926, Nam 718604
+ * User names: Ammar - amamra, Nam - namn1
  * For COMP30024 Part A
  */
 
@@ -51,7 +51,7 @@ public class Game
      * @param arrayList the list to initialize
      * @param size the size of the uninitialized array list
      */
-    public static void initializeArrayList (ArrayList arrayList, int size)
+    public static void initializeArrayList (ArrayList<String[]> arrayList, int size)
     {
         for (int i = 0; i < size; i++)
         {
