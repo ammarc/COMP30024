@@ -1,12 +1,12 @@
 /**
  * Made by Ammar Ahmed and Nam Nguyen
  * Student IDs: Ammar 728926, Nam
+ * User names: Ammar - amamra, Nam -
  * For COMP30024 Part A
  */
 
 
 import athena.Board;
-import java.io.FileNotFoundException;
 import java.util.Scanner;
 import java.util.ArrayList;
 
@@ -17,10 +17,8 @@ public class Game
     /**
      *  This is the main method used to take the raw input and set up the board
      */
-    public static void main (String args[]) throws FileNotFoundException
+    public static void main (String args[])
     {
-        // REMOVE THIS:
-        // Scanner in = new Scanner (new File("src/input2.txt"));
         Scanner in = new Scanner (System.in);
         int n = in.nextInt();
         in.nextLine();
@@ -35,8 +33,8 @@ public class Game
             String nextString = in.nextLine();
             String[] boardRow = nextString.split("\\s+");
             boardArray.set(i, boardRow);
-
         }
+
         in.close();
 
         Board board = new Board(boardArray);
@@ -45,7 +43,6 @@ public class Game
 
         System.out.println(board.numLegalHMoves());
         System.out.println(board.numLegalVMoves());
-
     }
 
     /**
