@@ -4,8 +4,8 @@
  * For COMP30024 Part A
  */
 
-import athena.Board;
 
+import athena.Board;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 import java.util.ArrayList;
@@ -13,6 +13,7 @@ import java.util.ArrayList;
 
 public class Game
 {
+
     /**
      *  This is the main method used to take the raw input and set up the board
      */
@@ -34,6 +35,7 @@ public class Game
             String nextString = in.nextLine();
             String[] boardRow = nextString.split("\\s+");
             boardArray.set(i, boardRow);
+
         }
         in.close();
 
@@ -43,6 +45,7 @@ public class Game
 
         System.out.println(board.numLegalHMoves());
         System.out.println(board.numLegalVMoves());
+
     }
 
     /**
