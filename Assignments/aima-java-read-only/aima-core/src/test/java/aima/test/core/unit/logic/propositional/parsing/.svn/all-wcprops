@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/!svn/ver/344/trunk/aima-core/src/test/java/aima/test/core/unit/logic/propositional/parsing
+END
+PEParserTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 113
+/svn/!svn/ver/344/trunk/aima-core/src/test/java/aima/test/core/unit/logic/propositional/parsing/PEParserTest.java
+END
+PELexerTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/svn/!svn/ver/344/trunk/aima-core/src/test/java/aima/test/core/unit/logic/propositional/parsing/PELexerTest.java
+END
+ListTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/svn/!svn/ver/344/trunk/aima-core/src/test/java/aima/test/core/unit/logic/propositional/parsing/ListTest.java
+END

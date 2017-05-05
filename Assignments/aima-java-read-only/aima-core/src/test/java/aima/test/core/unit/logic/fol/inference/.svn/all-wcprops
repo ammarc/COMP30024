@@ -1,0 +1,47 @@
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/!svn/ver/344/trunk/aima-core/src/test/java/aima/test/core/unit/logic/fol/inference
+END
+ParamodulationTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 111
+/svn/!svn/ver/344/trunk/aima-core/src/test/java/aima/test/core/unit/logic/fol/inference/ParamodulationTest.java
+END
+FOLBCAskTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/svn/!svn/ver/344/trunk/aima-core/src/test/java/aima/test/core/unit/logic/fol/inference/FOLBCAskTest.java
+END
+DemodulationTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/svn/!svn/ver/344/trunk/aima-core/src/test/java/aima/test/core/unit/logic/fol/inference/DemodulationTest.java
+END
+FOLOTTERLikeTheoremProverTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 122
+/svn/!svn/ver/344/trunk/aima-core/src/test/java/aima/test/core/unit/logic/fol/inference/FOLOTTERLikeTheoremProverTest.java
+END
+FOLFCAskTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/svn/!svn/ver/344/trunk/aima-core/src/test/java/aima/test/core/unit/logic/fol/inference/FOLFCAskTest.java
+END
+FOLModelEliminationTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 116
+/svn/!svn/ver/344/trunk/aima-core/src/test/java/aima/test/core/unit/logic/fol/inference/FOLModelEliminationTest.java
+END
+FOLTFMResolutionTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 113
+/svn/!svn/ver/344/trunk/aima-core/src/test/java/aima/test/core/unit/logic/fol/inference/FOLTFMResolutionTest.java
+END

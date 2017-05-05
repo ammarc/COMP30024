@@ -1,0 +1,59 @@
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/!svn/ver/574/trunk/aimax-osm/src/main/java/aimax/osm/data/entities
+END
+EntityAttribute.java
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/!svn/ver/574/trunk/aimax-osm/src/main/java/aimax/osm/data/entities/EntityAttribute.java
+END
+MapNode.java
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/!svn/ver/568/trunk/aimax-osm/src/main/java/aimax/osm/data/entities/MapNode.java
+END
+EntityViewInfo.java
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/!svn/ver/482/trunk/aimax-osm/src/main/java/aimax/osm/data/entities/EntityViewInfo.java
+END
+package-info.java
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/!svn/ver/449/trunk/aimax-osm/src/main/java/aimax/osm/data/entities/package-info.java
+END
+Track.java
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/!svn/ver/557/trunk/aimax-osm/src/main/java/aimax/osm/data/entities/Track.java
+END
+WayRefList.java
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/!svn/ver/556/trunk/aimax-osm/src/main/java/aimax/osm/data/entities/WayRefList.java
+END
+MapEntity.java
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/!svn/ver/574/trunk/aimax-osm/src/main/java/aimax/osm/data/entities/MapEntity.java
+END
+WayRef.java
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/!svn/ver/568/trunk/aimax-osm/src/main/java/aimax/osm/data/entities/WayRef.java
+END
+MapWay.java
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/!svn/ver/557/trunk/aimax-osm/src/main/java/aimax/osm/data/entities/MapWay.java
+END

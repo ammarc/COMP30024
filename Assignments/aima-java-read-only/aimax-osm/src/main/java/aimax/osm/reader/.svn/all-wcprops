@@ -1,0 +1,101 @@
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/!svn/ver/579/trunk/aimax-osm/src/main/java/aimax/osm/reader
+END
+Bz2OsmReader.java
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/!svn/ver/579/trunk/aimax-osm/src/main/java/aimax/osm/reader/Bz2OsmReader.java
+END
+NodeElementProcessor.java
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/!svn/ver/433/trunk/aimax-osm/src/main/java/aimax/osm/reader/NodeElementProcessor.java
+END
+MapReader.java
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/!svn/ver/579/trunk/aimax-osm/src/main/java/aimax/osm/reader/MapReader.java
+END
+DummyElementProcessor.java
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/!svn/ver/433/trunk/aimax-osm/src/main/java/aimax/osm/reader/DummyElementProcessor.java
+END
+OsmElementProcessor.java
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/!svn/ver/433/trunk/aimax-osm/src/main/java/aimax/osm/reader/OsmElementProcessor.java
+END
+WayElementProcessor.java
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/!svn/ver/579/trunk/aimax-osm/src/main/java/aimax/osm/reader/WayElementProcessor.java
+END
+Tag.java
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/!svn/ver/433/trunk/aimax-osm/src/main/java/aimax/osm/reader/Tag.java
+END
+WayNodeElementProcessor.java
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/!svn/ver/433/trunk/aimax-osm/src/main/java/aimax/osm/reader/WayNodeElementProcessor.java
+END
+TagListener.java
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/!svn/ver/433/trunk/aimax-osm/src/main/java/aimax/osm/reader/TagListener.java
+END
+OsmReader.java
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/!svn/ver/579/trunk/aimax-osm/src/main/java/aimax/osm/reader/OsmReader.java
+END
+OsmRuntimeException.java
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/!svn/ver/433/trunk/aimax-osm/src/main/java/aimax/osm/reader/OsmRuntimeException.java
+END
+package-info.java
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/!svn/ver/579/trunk/aimax-osm/src/main/java/aimax/osm/reader/package-info.java
+END
+FilteringOsmReader.java
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/!svn/ver/579/trunk/aimax-osm/src/main/java/aimax/osm/reader/FilteringOsmReader.java
+END
+TagElementProcessor.java
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/!svn/ver/433/trunk/aimax-osm/src/main/java/aimax/osm/reader/TagElementProcessor.java
+END
+ElementProcessor.java
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/!svn/ver/433/trunk/aimax-osm/src/main/java/aimax/osm/reader/ElementProcessor.java
+END
+OsmHandler.java
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/!svn/ver/433/trunk/aimax-osm/src/main/java/aimax/osm/reader/OsmHandler.java
+END

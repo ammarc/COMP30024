@@ -25,11 +25,12 @@ public abstract class Piece
 
     public int getXPos() { return xPos; }
 
-    public void setXPos (int xPos) { this.xPos = xPos; }
-
     public int getYPos() { return yPos; }
 
-    public void setYPos(int yPos) { this.yPos = yPos; }
+    public void setCoordinates(int x, int y){
+        this.xPos = x;
+        this.yPos = y;
+    }
 
     /**
      * Getters and setters for the different directions

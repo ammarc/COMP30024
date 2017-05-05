@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/!svn/ver/344/trunk/aima-core/src/test/java/aima/test/core/unit/environment/nqueens
+END
+NQueensFitnessFunctionTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 119
+/svn/!svn/ver/344/trunk/aima-core/src/test/java/aima/test/core/unit/environment/nqueens/NQueensFitnessFunctionTest.java
+END
+NQueensGoalTestTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/svn/!svn/ver/344/trunk/aima-core/src/test/java/aima/test/core/unit/environment/nqueens/NQueensGoalTestTest.java
+END
+NQueensBoardTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/svn/!svn/ver/344/trunk/aima-core/src/test/java/aima/test/core/unit/environment/nqueens/NQueensBoardTest.java
+END
+NQueensFunctionFactoryTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 119
+/svn/!svn/ver/344/trunk/aima-core/src/test/java/aima/test/core/unit/environment/nqueens/NQueensFunctionFactoryTest.java
+END

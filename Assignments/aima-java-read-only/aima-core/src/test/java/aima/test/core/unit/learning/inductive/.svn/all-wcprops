@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/!svn/ver/344/trunk/aima-core/src/test/java/aima/test/core/unit/learning/inductive
+END
+DLTestTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/svn/!svn/ver/344/trunk/aima-core/src/test/java/aima/test/core/unit/learning/inductive/DLTestTest.java
+END
+MockDLTestFactory.java
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/svn/!svn/ver/344/trunk/aima-core/src/test/java/aima/test/core/unit/learning/inductive/MockDLTestFactory.java
+END
+DecisionListTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/svn/!svn/ver/344/trunk/aima-core/src/test/java/aima/test/core/unit/learning/inductive/DecisionListTest.java
+END

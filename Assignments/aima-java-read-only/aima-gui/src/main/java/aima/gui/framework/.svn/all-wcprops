@@ -1,0 +1,71 @@
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/!svn/ver/535/trunk/aima-gui/src/main/java/aima/gui/framework
+END
+AgentAppEnvironmentView.java
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/!svn/ver/496/trunk/aima-gui/src/main/java/aima/gui/framework/AgentAppEnvironmentView.java
+END
+AgentAppController.java
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/!svn/ver/500/trunk/aima-gui/src/main/java/aima/gui/framework/AgentAppController.java
+END
+package-info.java
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/!svn/ver/447/trunk/aima-gui/src/main/java/aima/gui/framework/package-info.java
+END
+MessageLoggerPanel.java
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/!svn/ver/527/trunk/aima-gui/src/main/java/aima/gui/framework/MessageLoggerPanel.java
+END
+MessageLogger.java
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/!svn/ver/381/trunk/aima-gui/src/main/java/aima/gui/framework/MessageLogger.java
+END
+DemoController.java
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/!svn/ver/502/trunk/aima-gui/src/main/java/aima/gui/framework/DemoController.java
+END
+SimpleAgentApp.java
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/!svn/ver/535/trunk/aima-gui/src/main/java/aima/gui/framework/SimpleAgentApp.java
+END
+AgentAppFrame.java
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/!svn/ver/517/trunk/aima-gui/src/main/java/aima/gui/framework/AgentAppFrame.java
+END
+PopupShower.java
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/!svn/ver/381/trunk/aima-gui/src/main/java/aima/gui/framework/PopupShower.java
+END
+SimulationThread.java
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/!svn/ver/500/trunk/aima-gui/src/main/java/aima/gui/framework/SimulationThread.java
+END
+EmptyEnvironmentView.java
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/!svn/ver/381/trunk/aima-gui/src/main/java/aima/gui/framework/EmptyEnvironmentView.java
+END

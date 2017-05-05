@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/!svn/ver/344/trunk/aima-core/src/test/java/aima/test/core/unit/search/csp
+END
+MapCSPTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/!svn/ver/344/trunk/aima-core/src/test/java/aima/test/core/unit/search/csp/MapCSPTest.java
+END
+AssignmentTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/!svn/ver/344/trunk/aima-core/src/test/java/aima/test/core/unit/search/csp/AssignmentTest.java
+END
+DomainsTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/!svn/ver/344/trunk/aima-core/src/test/java/aima/test/core/unit/search/csp/DomainsTest.java
+END

@@ -1,0 +1,41 @@
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/!svn/ver/345/trunk/aima-gui/src/main/java/aima/gui/demo/logic
+END
+DPLLDemo.java
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/!svn/ver/345/trunk/aima-gui/src/main/java/aima/gui/demo/logic/DPLLDemo.java
+END
+PLResolutionDemo.java
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/!svn/ver/345/trunk/aima-gui/src/main/java/aima/gui/demo/logic/PLResolutionDemo.java
+END
+FolDemo.java
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/!svn/ver/345/trunk/aima-gui/src/main/java/aima/gui/demo/logic/FolDemo.java
+END
+PLFCEntailsDemo.java
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/!svn/ver/345/trunk/aima-gui/src/main/java/aima/gui/demo/logic/PLFCEntailsDemo.java
+END
+WalkSatDemo.java
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/!svn/ver/345/trunk/aima-gui/src/main/java/aima/gui/demo/logic/WalkSatDemo.java
+END
+TTEntailsDemo.java
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/!svn/ver/345/trunk/aima-gui/src/main/java/aima/gui/demo/logic/TTEntailsDemo.java
+END

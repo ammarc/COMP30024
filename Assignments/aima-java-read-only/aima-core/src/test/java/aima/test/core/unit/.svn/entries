@@ -1,0 +1,83 @@
+10
+
+dir
+588
+http://aima-java.googlecode.com/svn/trunk/aima-core/src/test/java/aima/test/core/unit
+http://aima-java.googlecode.com/svn
+
+
+
+2010-01-07T09:46:33.467629Z
+402
+Ruediger.Lunde
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+69387497-ef19-0410-9dc2-eda6d4ab8473
+
+learning
+dir
+
+probability
+dir
+
+environment
+dir
+
+search
+dir
+
+AllAIMAUnitTestSuite.java
+file
+
+
+
+
+2010-06-21T04:59:00.000000Z
+f02b3c0fd765e761f298b54b70fe2742
+2009-11-17T02:54:16.442209Z
+304
+ctjoreilly
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+747
+
+logic
+dir
+
+util
+dir
+
+agent
+dir
+

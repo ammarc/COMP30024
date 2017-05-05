@@ -1,0 +1,17 @@
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/!svn/ver/344/trunk/aima-core/src/test/java/aima/test/core/unit/learning/neural
+END
+LayerTests.java
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svn/!svn/ver/344/trunk/aima-core/src/test/java/aima/test/core/unit/learning/neural/LayerTests.java
+END
+BackPropagationTests.java
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/svn/!svn/ver/344/trunk/aima-core/src/test/java/aima/test/core/unit/learning/neural/BackPropagationTests.java
+END
