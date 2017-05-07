@@ -328,6 +328,7 @@ public class Referee {
 
 			// is the position we are moving to already occupied?
 			if (grid[toi][toj] != Piece.BLANK) {
+				System.out.println(grid[toi][toj]);
 				throw new IllegalMoveException("that position is occupied!");
 			}
 

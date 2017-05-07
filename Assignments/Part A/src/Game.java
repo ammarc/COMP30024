@@ -37,9 +37,7 @@ public class Game
 
         in.close();
 
-        Board board = new Board(boardArray);
-        board.setN(n);
-        board.setUpPieces();
+        Board board = new Board(boardArray, n);
 
         System.out.println(board.numLegalHMoves());
         System.out.println(board.numLegalVMoves());

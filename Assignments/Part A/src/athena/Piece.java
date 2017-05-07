@@ -6,44 +6,46 @@ package athena;
  * User names: Ammar - amamra, Nam - namn1
  * For COMP30024 Part A
  */
+import java.awt.*;
+import java.util.ArrayList;
 
 public abstract class Piece
 {
-    private int xPos;
-    private int yPos;
+    private Point coordinate;
+    public enum Direction { UP, DOWN, LEFT, RIGHT };
+
+    public ArrayList<Direction> getDirection() {
+        return direction;
+    }
 
     /** directions corresponding to Left, Right, Up, Down respectively */
-    private boolean[] direction = {false, false, false, false};
+    private ArrayList<Direction> direction;
 
     private int numLegalMoves;
 
     public Piece(int x, int y)
     {
-        this.xPos = x;
-        this.yPos = y;
+        this.coordinate = new Point(x, y);
     }
 
-    public int getXPos() { return xPos; }
+    public int getXPos() { return (int)coordinate.getX(); }
 
-    public int getYPos() { return yPos; }
+    public int getYPos() { return (int)coordinate.getY(); }
 
     public void setCoordinates(int x, int y){
-        this.xPos = x;
-        this.yPos = y;
+        this.coordinate = new Point(x,y);
     }
 
     /**
      * Getters and setters for the different directions
      */
-    public void setLeftFalse () { direction[0] = false; }
-    public void setRightFalse () { direction[1] = false; }
-    public void setDownFalse () { direction[3] = false; }
-    public void setUpFalse () { direction[2] = false; }
+    public void resetDir(){
+        this.direction = new ArrayList<>();
+    }
 
-    public void setLeftTrue () { direction[0] = true; }
-    public void setRightTrue () { direction[1] = true; }
-    public void setDownTrue () { direction[3] = true; }
-    public void setUpTrue () { direction[2] = true; }
+    public void addDir(Direction d){
+        this.direction.add(d);
+    }
 
     public int getNumLegalMoves () { return this.numLegalMoves; }
 
@@ -53,14 +55,6 @@ public abstract class Piece
      */
     public void setLegalMoves ()
     {
-        int count = 0;
-        for (int i = 0; i < 4; i++)
-        {
-            if (this.direction[i])
-            {
-                count++;
-            }
-        }
-        this.numLegalMoves = count;
+        this.numLegalMoves = this.direction.size();
     }
 }
