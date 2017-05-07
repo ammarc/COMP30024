@@ -1,83 +1,0 @@
-10
-
-dir
-588
-http://aima-java.googlecode.com/svn/trunk/aima-core/src/test/java/aima/test/core/unit/environment
-http://aima-java.googlecode.com/svn
-
-
-
-2010-01-07T09:46:33.467629Z
-402
-Ruediger.Lunde
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-69387497-ef19-0410-9dc2-eda6d4ab8473
-
-tictactoe
-dir
-
-vacuum
-dir
-
-cellworld
-dir
-
-xyenv
-dir
-
-eightpuzzle
-dir
-
-map
-dir
-
-nqueens
-dir
-
-EnvironmentTestSuite.java
-file
-
-
-
-
-2010-06-21T04:58:20.000000Z
-b7fd59883f61a788cd1b9d1ee4cae518
-2009-11-23T02:00:23.947631Z
-313
-victor.meyerson
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-2339
-
