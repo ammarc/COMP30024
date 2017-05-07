@@ -1,5 +1,9 @@
-.idea*
-.iml*
-.xml*
-.svn*
-out*
+*.iml
+*.xml
+*.svn
+*.class
+*.DS_Store
+
+# Directories to ignore
+out/
+.idea/
