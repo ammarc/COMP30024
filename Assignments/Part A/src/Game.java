@@ -6,7 +6,8 @@
  */
 
 
-import athena.Board;
+import com.namnammar.components.Board;
+
 import java.util.Scanner;
 import java.util.ArrayList;
 
@@ -37,7 +38,7 @@ public class Game
 
         in.close();
 
-        Board board = new Board(boardArray, n);
+        Board board = new Board(boardArray);
 
         System.out.println(board.numLegalHMoves());
         System.out.println(board.numLegalVMoves());

@@ -1,4 +1,4 @@
-package athena;
+package com.namnammar.components;
 
 /**
  * Made by Ammar Ahmed and Nam Nguyen
@@ -46,6 +46,10 @@ public abstract class Piece
     public void setUpTrue () { direction[2] = true; }
 
     public int getNumLegalMoves () { return this.numLegalMoves; }
+
+    public boolean[] getDirection() {
+        return direction;
+    }
 
     /**
      * Sets the legal moves for the piece by checking the four
