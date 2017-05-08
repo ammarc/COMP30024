@@ -6,4 +6,4 @@
 
 # Directories to ignore
 out/
-.idea/
+.idea/*

@@ -7,76 +7,47 @@ package athena;
  * For COMP30024 Part A
  */
 
+import aiproj.slider.Move;
+
+import java.awt.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Board
 {
     private int n;
-    private ArrayList<String[]> board;
+    public static enum Type {BLANK, HSLIDER, VSLIDER, OBSTACLE};
+
+    private HashMap<Point, Type> board;
+
+    private HashMap<Point, Piece> horizontalPieces;
+    private HashMap<Point, Piece> verticalPieces;
 
     public ArrayList<Piece> getHorizontalPieces() {
-        return horizontalPieces;
+        return new ArrayList<>(horizontalPieces.values());
     }
 
     public ArrayList<Piece> getVerticalPieces() {
-        return verticalPieces;
+        return new ArrayList<>(verticalPieces.values());
     }
-
-    private ArrayList<Piece> horizontalPieces = new ArrayList<>();
-    private ArrayList<Piece> verticalPieces = new ArrayList<>();
-    private ArrayList<Obstacle> obstacles = new ArrayList<>();
-
-    public void setN(int n) { this.n = n; }
-
-    public int getN() { return this.n; }
 
     /**
      * Constructor for this class
      * @param boardArray 2-D board array
      */
-    public Board (ArrayList<String[]> boardArray)
+    public Board (ArrayList<String[]> boardArray, int n)
     {
-        this.board = boardArray;
-    }
+        this.n = n;
+        horizontalPieces = new HashMap<>(n);
+        verticalPieces = new HashMap<>(n);
 
-    /**
-     * This method sets up the pieces on the board by looking around them
-     * and setting the boolean values of their directions correctly
-     */
-    public void setUpPieces ()
-    {
-        for (int i = 0; i < n; i++)
-        {
-            int j = 0;
-            for (String c : board.get(i))
-            {
-                if (c.equals("H"))
-                {
-                    Horizontal horizontal = new Horizontal(i, j);
-                    /** Looking down, right, checking the case when the piece is
-                     * on the right edge of the board and up respectively */
-                    setHorizontalDir(horizontal);
+        board = readBoard(boardArray, horizontalPieces, verticalPieces);
 
-                    horizontalPieces.add(horizontal);
-                }
-
-                else if (c.equals("V"))
-                {
-                    Vertical vertical = new Vertical(i, j);
-                    /** Looking  up, right, checking the case when the piece is
-                     * on the top edge of the board and left respectively */
-                    setVerticalDir(vertical);
-
-                    verticalPieces.add(vertical);
-                }
-
-                else if (c.equals("B"))
-                {
-                    Obstacle obs = new Obstacle(i, j);
-                    obstacles.add(obs);
-                }
-                j++;
-            }
+        for(Piece p : horizontalPieces.values()){
+            setHorizontalDir(p);
+        }
+        for(Piece p : verticalPieces.values()){
+            setVerticalDir(p);
         }
     }
 
@@ -174,44 +145,3 @@ public class Board
         if (j > 0 && board.get(i)[j-1].equals("+")) vertical.setLeftTrue();
 
         else vertical.setLeftFalse();
-    }
-
-    /**
-     * Calculates the number of total horizontal legal moves
-     * by first setting them for the piece and adding it to total
-     * @return number of legal horizontal moves
-     */
-    public int numLegalHMoves()
-    {
-        int count = 0;
-
-        for( Piece p : horizontalPieces)
-        {
-            p.setLegalMoves();
-            count += p.getNumLegalMoves();
-        }
-        return count;
-    }
-
-    /**
-     * Calculates the number of total vertical legal moves
-     * by first setting them for the piece and adding it to total
-     * @return number of legal vertical moves
-     */
-    public int numLegalVMoves()
-    {
-        int count = 0;
-
-        for (Piece p : verticalPieces)
-        {
-            p.setLegalMoves();
-            count += p.getNumLegalMoves();
-        }
-        return count;
-    }
-
-    public void setFree (int row, int column)
-    {
-        board.get(row)[column] = "+";
-    }
-}

@@ -1,0 +1,69 @@
+\documentclass[twoside]{article}
+\usepackage{lmodern}
+\title{Artificial Intelligence: Week 1}
+\date{}
+\author{}
+\begin{document}
+\maketitle
+\section{What is an AI?}
+There are various definitions of an AI, ranging from thinking humanly and
+rationally to acting humanly and rationally. The \emph{turing test}, is test
+in which a human interrogator interacts with a machine, sending it messages
+back and forth, and a machine passes if it fools the human into thinking that
+the messages are being sent to them by a human. For this a computer needs:
+\textbf{natural language processing, knowledge representation, automated
+reasoning and machine learning}. To pass the \emph{total turing test} a computer
+would additionally need \textbf{computer vision and robotics.}
+\section{Intelligent Agents}
+An \textbf{agent} is just something that acts and a \textbf{rational agent} is
+one that acts so as to achieve the best outcome or, when there is uncertainty,
+the best expected outcome. \textbf{Percept} means the agent's perceptual inputs
+at any given time, and a \textbf{percept sequence} is the complete history of
+everything the agent has ever perceived. The \textbf{agent function} is an
+abstract mathematical description that maps a given percept to an action; an
+\textbf{agent program} is a concrete implementation of, running within some
+physical system. \emph{It is better to design a performance measure according
+to what one wants in an environment, then how one wants an agent to behave.}
+\\ \\
+The proper definition of a rational agent is \emph{for each possible percept
+sequence, a rational agent should select an action that is expected to
+maximize its performance measure, given the evidence provided by the percept
+sequence and whatever built-in knowledge the agent has.} An \textbf{omniscient}
+agent knows the actual outcomes of its actions.
+\subsection{The Nature of Environments}
+An environment is defined as \textbf{PEAS}: performance measure, environment,
+actuators and sensors. There are different types of environments, namely:
+\begin{itemize}
+\item \textbf{Observable vs Partially-Observable}: it is observable when the agents'
+        sensors have complete access to the environment's state at all times
+\item \textbf{Single agent vs Multi agent}: there could be multiple agents in
+        an environment. There is also a question of what must be considered an
+        agent. This gives way to the concept of \textbf{competitive} vs
+        \textbf{cooperative} environments.
+\item \textbf{Deterministic vs Stochastic}: If the next state can be completely
+        determined by the current state and the action executed by the agent,
+        then it is deterministic; and stochastic otherwise. An environment
+        is \textbf{uncertain} if it is not fully observable or not deterministic.
+        Note that a \textbf{non-deterministic} environment is one where each
+        action is characterized by its possible outcomes, but no probabilities
+        are attached to them.
+\item \textbf{Episodic vs Sequential}: In an episodic environment the agent's
+        experience is divided into atomic episodes. The next episode doesn't
+        depend on the action taken in the previous episode.
+\item \textbf{Static vs Dynamic}: If an environment can change when an agent
+        is deliberating, then it's dynamic, and is static otherwise. If the
+        environment doesn't change when deliberating but the performance score
+        does, then we call it \textbf{semi-dynamic.}
+\item \textbf{Discrete vs Continuous}: The distinction here applies to the state
+        of the environment, the way time is handled and the percepts and actions
+        of the agent. For example, chess having a discrete set of states; the
+        same doesn't apply for taxi driving.
+\item \textbf{Known vs Unknown}: This applies to the agent's state of knowledge
+        about the ``laws of physics'' of the environment. Note that it's 
+        possible that a known environment is partially observable like solitaire.
+        Conversely, an environment can also be unknown and fully observable,
+        like in a video game, one can see the state but one doesn't know the
+        control until one tries to play.
+\end{itemize}
+\subsection{The Structure of Agents}
+\end{document}
