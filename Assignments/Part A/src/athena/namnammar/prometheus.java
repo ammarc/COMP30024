@@ -5,6 +5,7 @@ package athena.namnammar; /**
  * For COMP30024 Part B
  */
 
+import java.awt.*;
 import java.util.Scanner;
 import java.util.ArrayList;
 
@@ -23,8 +24,7 @@ public class Prometheus implements SliderPlayer {
     public void init(int dimension, String board, char player) {
         this.dim = dimension;
         loadBoard(board);
-        this.myPlayer = new Player(this.board.getHorizontalPieces(),
-                                this.board.getVerticalPieces(), player);
+        this.myPlayer = new Player(player);
     }
 
     @Override
@@ -84,7 +84,7 @@ public class Prometheus implements SliderPlayer {
         initializeArrayList(boardArray, dim);
 
         /** Removing the spaces and adding to our board */
-        for (int i = dim - 1; i >= 0; i--)
+        for (int i = dim - 1; i > -1; i--)
         {
             String nextString = in.nextLine();
             String[] boardRow = nextString.split("\\s+");
@@ -92,9 +92,8 @@ public class Prometheus implements SliderPlayer {
         }
 
         in.close();
-        this.board = new Board(boardArray);
-        this.board.setN(dim);
-        this.board.setUpPieces();
+
+        this.board = new Board(boardArray, dim);
     }
 
     /**
