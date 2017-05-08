@@ -1,7 +1,7 @@
-/**
+package athena.namnammar; /**
  * Made by Ammar Ahmed and Nam Nguyen
  * Student IDs: Ammar 728926, Nam 718604
- * User names: Ammar - amamra, Nam - namn1
+ * User names: Ammar - ammara, Nam - namn1
  * For COMP30024 Part B
  */
 
@@ -9,11 +9,12 @@ import java.util.Scanner;
 import java.util.ArrayList;
 
 import athena.Board;
+import athena.Piece;
 import athena.Player;
 import aiproj.slider.Move;
 import aiproj.slider.SliderPlayer;
 
-public class SliderGame implements SliderPlayer {
+public class Prometheus implements SliderPlayer {
     private Board board;
     private int dim;
     private Player myPlayer;
@@ -27,37 +28,55 @@ public class SliderGame implements SliderPlayer {
     }
 
     @Override
-    public void update(Move move) {
-        if(move == null){
-            //do nothing
-        }
-        else{
-            int new_row, new_col = 0;
+    public void update(Move move)
+    {
+        if (move != null)
+        {
+            int newRow = 0;
+            int newCol = 0;
             int row = move.j;
             int col = move.i;
-            if (move.d == Move.Direction.UP){
-                new_row = row - 1;
-            }
-            if (move.d == Move.Direction.DOWN){
-                new_row = row + 1;
-            }
-            if (move.d == Move.Direction.LEFT){
-                new_col = col - 1;
-            }
-            if (move.d == Move.Direction.RIGHT){
-                new_col = col + 1;
+
+            switch (move.d)
+            {
+                case UP:
+                    newRow = row - 1;
+
+                case DOWN:
+                    newRow = row + 1;
+
+                case LEFT:
+                    newCol = col - 1;
+
+                case RIGHT:
+                    newCol = col + 1;
             }
 
-            
+            board.updateBoard(row, col, newRow, newCol);
         }
     }
 
     @Override
-    public Move move() {
+    public Move move()
+    {
+        if (this.myPlayer.getType() == 'H')
+        {
+            for (Piece p : board.getHorizontalPieces())
+                for (Boolean b : p.getDirection())
+                    if (b && p.getDirection()[1])
+                        return new Move(p.getYPos(), p.getXPos(), Move.Direction.RIGHT);
+        }
+
+        for (Piece p : board.getVerticalPieces())
+            for (Boolean b : p.getDirection())
+                if (b && p.getDirection()[2])
+                    return new Move(p.getYPos(), p.getXPos(), Move.Direction.UP);
+
         return null;
     }
 
-    private void loadBoard(String board){
+    private void loadBoard(String board)
+    {
 
         Scanner in = new Scanner (board);
         /** An array of strings to store the board */

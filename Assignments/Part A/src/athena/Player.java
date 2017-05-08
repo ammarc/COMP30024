@@ -9,6 +9,7 @@ public class Player {
     // pieces that the player && opponent controls
     private ArrayList<Piece> myPieces;
     private ArrayList<Piece> opponent;
+    private char type;
 
     public Player(ArrayList<Piece> hPieces, ArrayList<Piece> vPieces, char player){
         if(player == 'H'){
@@ -19,6 +20,11 @@ public class Player {
             this.myPieces = vPieces;
             this.opponent = hPieces;
         }
+        this.type = player;
+    }
+
+    public char getType() {
+        return type;
     }
 
     // strategy

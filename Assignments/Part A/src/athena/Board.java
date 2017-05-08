@@ -80,70 +80,100 @@ public class Board
         }
     }
 
-    public void updateBoard(int row, int col, int new_row, int new_col){
-        String to_move = this.board.get(row)[col];
+    public void updateBoard(int row, int col, int newRow, int newCol)
+    {
+        String toMove = board.get(row)[col];
         // swap places of two cells on board
-        this.board.get(row)[col] = "+";
-        this.board.get(new_row)[new_col] = to_move;
+        board.get(row)[col] = "+";
+        board.get(newRow)[newCol] = toMove;
 
-        //find the piece
-        Piece moving = findPiece(row, col, to_move);
-        moving.setCoordinates(new_row, new_col);
+        // find the piece
+        Piece moving = findPiece(row, col, toMove);
+        moving.setCoordinates(newRow, newCol);
 
-        //update the moved piece's direction and coordinates
-        if (to_move.equals("H")){
-            setHorizontalDir(moving);
+        // update the moved piece's direction and coordinates
+        for (Piece h : horizontalPieces)
+        {
+            if (Math.abs(h.getXPos() - moving.getXPos()) < 2 ||
+                    Math.abs(h.getYPos() - moving.getYPos()) < 2)
+                setHorizontalDir(h);
         }
-        else {
-            setVerticalDir(moving);
+
+        for (Piece v : verticalPieces)
+        {
+            if (Math.abs(v.getXPos() - moving.getXPos()) < 2 ||
+                    Math.abs(v.getYPos() - moving.getYPos()) < 2)
+                setVerticalDir(v);
         }
+
     }
 
-    private Piece findPiece(int i, int j, String type){
-        if (type.equals("H")){
-            for (Piece h : this.horizontalPieces){
-                if (h.getXPos() == i && h.getYPos() == j){
+    private Piece findPiece(int row, int column, String type)
+    {
+        if (type.equals("H"))
+        {
+            for (Piece h : this.horizontalPieces)
+                if (h.getXPos() == row && h.getYPos() == column)
                     return h;
-                }
-            }
         }
-        else {
-            for (Piece v : this.horizontalPieces){
-                if (v.getXPos() == i && v.getYPos() == j){
+        else
+        {
+            for (Piece v : this.verticalPieces)
+                if (v.getXPos() == row && v.getYPos() == column)
                     return v;
-                }
-            }
         }
 
-
+        System.err.println("ERROR: no piece found at " + row + ", " + column);
         return null;
     }
 
-    private void setHorizontalDir(Piece horizontal){
+    // TODO: Code duplication in both these methods
+    private void setHorizontalDir(Piece horizontal)
+    {
         int i = horizontal.getXPos();
         int j = horizontal.getYPos();
 
-        if (i > 0 && board.get(i-1)[j].equals("+")) { horizontal.setUpTrue(); }
+        // Looking up
+        if (i > 0 && board.get(i-1)[j].equals("+")) horizontal.setUpTrue();
 
-        if (j < n - 1 && board.get(i)[j+1].equals("+")) { horizontal.setRightTrue(); }
+        else horizontal.setUpFalse();
 
-        else if (j == n - 1) { horizontal.setRightTrue(); }
+        // Looking right
+        if (j < n - 1 && board.get(i)[j+1].equals("+")) horizontal.setRightTrue();
 
-        if (i < n - 1 && board.get(i+1)[j].equals("+")) { horizontal.setDownTrue(); }
+        else if (j == n - 1) horizontal.setRightTrue();
+
+        else horizontal.setRightFalse();
+
+        // Looking down
+        if (i < n - 1 && board.get(i+1)[j].equals("+")) horizontal.setDownTrue();
+
+        else horizontal.setDownFalse();
 
     }
 
-    private void setVerticalDir(Piece vertical){
+   // TODO: Code duplication in both these methods
+    private void setVerticalDir(Piece vertical)
+    {
         int i = vertical.getXPos();
         int j = vertical.getYPos();
 
-        if (i < n - 1 && board.get(i+1)[j].equals("+")) { vertical.setUpTrue(); }
+        // Looking up
+        if (i < n - 1 && board.get(i+1)[j].equals("+")) vertical.setUpTrue();
 
-        else if (i == n - 1) { vertical.setUpTrue(); }
+        else if (i == n - 1) vertical.setUpTrue();
 
-        if (j < n - 1 && board.get(i)[j+1].equals("+")) { vertical.setRightTrue(); }
+        else vertical.setUpFalse();
 
-        if (j > 0 && board.get(i)[j-1].equals("+")) { vertical.setLeftTrue(); }
+        // Looking right
+        if (j < n - 1 && board.get(i)[j+1].equals("+")) vertical.setRightTrue();
+
+        else vertical.setRightFalse();
+
+        // Looking left
+        if (j > 0 && board.get(i)[j-1].equals("+")) vertical.setLeftTrue();
+
+        else vertical.setLeftFalse();
     }
 
     /**
@@ -178,5 +208,10 @@ public class Board
             count += p.getNumLegalMoves();
         }
         return count;
+    }
+
+    public void setFree (int row, int column)
+    {
+        board.get(row)[column] = "+";
     }
 }

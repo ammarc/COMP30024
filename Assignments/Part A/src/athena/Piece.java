@@ -47,6 +47,10 @@ public abstract class Piece
 
     public int getNumLegalMoves () { return this.numLegalMoves; }
 
+    public boolean[] getDirection() {
+        return direction;
+    }
+
     /**
      * Sets the legal moves for the piece by checking the four
      * directions around the piece and incrementing count accordingly
