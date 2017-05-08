@@ -14,7 +14,7 @@ import com.namnammar.components.Board;
 import com.namnammar.components.Piece;
 import com.namnammar.components.Player;
 
-public class Prometheus implements SliderPlayer {
+public class Athena implements SliderPlayer {
     private Board board;
     private int dim;
     private Player myPlayer;
