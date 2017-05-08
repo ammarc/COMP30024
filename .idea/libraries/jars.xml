@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="jars">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/Assignments/aima-java-read-only/aima-all/release/jars/aima-core.jar!/" />
+      <root url="jar://$PROJECT_DIR$/Assignments/aima-java-read-only/aima-all/release/jars/aima-gui.jar!/" />
+      <root url="jar://$PROJECT_DIR$/Assignments/aima-java-read-only/aima-all/release/jars/aimax-osm.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

@@ -32,32 +32,39 @@ public class SliderGame implements SliderPlayer {
             //do nothing
         }
         else{
-            int row = move.j;
-            int col = move.i;
-            int new_row = row , new_col = col;
-            if (move.d == Move.Direction.UP){
-                new_row -= 1;
-            }
-            if (move.d == Move.Direction.DOWN){
-                new_row += 1;
-            }
-            if (move.d == Move.Direction.LEFT){
-                new_col -= 1;
-            }
-            if (move.d == Move.Direction.RIGHT){
-                new_col += 1;
-            }
-
-            board.updateBoard(col, row, new_col, new_row);
-//
-//            System.out.println("Current Board:");
-//            board.printBoard();
+            updateBoard(move);
         }
     }
 
     @Override
     public Move move() {
-        return myPlayer.random_next(this.board);
+
+        Move to_do = myPlayer.random_next(this.board);
+        if (to_do != null){
+            updateBoard(to_do);
+        }
+
+        return to_do;
+    }
+
+    private void updateBoard(Move move){
+        int row = move.j;
+        int col = move.i;
+        int new_row = row , new_col = col;
+        if (move.d == Move.Direction.UP){
+            new_row += 1;
+        }
+        if (move.d == Move.Direction.DOWN){
+            new_row -= 1;
+        }
+        if (move.d == Move.Direction.LEFT){
+            new_col -= 1;
+        }
+        if (move.d == Move.Direction.RIGHT){
+            new_col += 1;
+        }
+
+        board.updateBoard(col, row, new_col, new_row);
     }
 
     private void loadBoard(String board){
@@ -68,7 +75,7 @@ public class SliderGame implements SliderPlayer {
         initializeArrayList(boardArray, dim);
 
         /** Removing the spaces and adding to our board */
-        for (int i = 0; i < dim; i++)
+        for (int i = dim - 1; i > -1; i--)
         {
             String nextString = in.nextLine();
             String[] boardRow = nextString.split("\\s+");
@@ -76,15 +83,6 @@ public class SliderGame implements SliderPlayer {
         }
 
         in.close();
-//
-//        System.out.println("initial board:");
-//        for(int i = 0; i < dim; i++){
-//            for (int j = 0; j < dim; j++){
-//                String s = boardArray.get(i)[j];
-//                System.out.print(s);
-//            }
-//            System.out.println();
-//        }
 
         this.board = new Board(boardArray, dim);
     }

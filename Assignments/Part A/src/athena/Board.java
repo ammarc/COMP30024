@@ -41,7 +41,7 @@ public class Board
         horizontalPieces = new HashMap<>(n);
         verticalPieces = new HashMap<>(n);
 
-        board = readBoard(n, boardArray, horizontalPieces, verticalPieces);
+        board = readBoard(boardArray, horizontalPieces, verticalPieces);
 
         for(Piece p : horizontalPieces.values()){
             setHorizontalDir(p);
@@ -100,9 +100,21 @@ public class Board
         this.board.replace(cur, Type.BLANK);
         this.board.replace(next, to_move);
 
+
+
         //find the piece
-        Piece moving = findPiece(row, col, to_move);
+        Piece moving = findPiece(cur, to_move);
+        // update coordinates
         moving.setCoordinates(new_col, new_row);
+        // update in appropriate map
+        if (this.horizontalPieces.containsKey(cur)){
+            this.horizontalPieces.remove(cur);
+            this.horizontalPieces.put(next, moving);
+        }
+        else {
+            this.verticalPieces.remove(cur);
+            this.verticalPieces.put(next, moving);
+        }
 
         //update all pieces' direction
         for (Piece p : horizontalPieces.values()){
@@ -114,28 +126,30 @@ public class Board
 
     }
 
-    private Piece findPiece(int i, int j, Type type){
+    private Piece findPiece(Point cur, Type type){
         if (type == Type.HSLIDER){
-            return this.horizontalPieces.get(new Point(j,i));
+            return this.horizontalPieces.get(cur);
         }
         else {
-            return this.verticalPieces.get(new Point(j,i));
+            return this.verticalPieces.get(cur);
         }
     }
 
     private void setHorizontalDir(Piece horizontal){
-        int i = horizontal.getXPos();
-        int j = horizontal.getYPos();
+        int j = horizontal.getXPos();
+        int i = horizontal.getYPos();
 
         horizontal.resetDir();
 
-        if (i > 0 && board.get(new Point(j,i-1))==Type.BLANK) { horizontal.addDir(Piece.Direction.UP); }
+        if (i < n - 1 && board.get(new Point(j,i+1))==Type.BLANK) {
+            horizontal.addDir(Piece.Direction.UP);
+        }
 
         if (j < n - 1 && board.get(new Point(j+1,i))==Type.BLANK) { horizontal.addDir(Piece.Direction.RIGHT); }
 
         else if (j == n - 1) { horizontal.addDir(Piece.Direction.RIGHT); }
 
-        if (i < n - 1 && board.get(new Point(j,i+1))==Type.BLANK) { horizontal.addDir(Piece.Direction.DOWN);; }
+        if (i > 0 && board.get(new Point(j,i-1))==Type.BLANK) { horizontal.addDir(Piece.Direction.DOWN);; }
 
     }
 
@@ -145,9 +159,9 @@ public class Board
 
         vertical.resetDir();
 
-        if (i > 0 && board.get(new Point(j,i-1))==Type.BLANK) { vertical.addDir(Piece.Direction.UP); }
+        if (i < n - 1 && board.get(new Point(j,i+1))==Type.BLANK) { vertical.addDir(Piece.Direction.UP); }
 
-        else if (i == 0) { vertical.addDir(Piece.Direction.UP); }
+        else if (i == n) { vertical.addDir(Piece.Direction.UP); }
 
         if (j < n - 1 && board.get(new Point(j+1,i))==Type.BLANK) { vertical.addDir(Piece.Direction.RIGHT); }
 
@@ -213,7 +227,7 @@ public class Board
         HashMap<Point, Type> boardMap = new HashMap<>(n*n);
         int i,j;
         Point coor;
-        for(i=0; i<n; i++){
+        for(i=n-1; i>-1; i--){
             for(j=0; j<n; j++){
                 coor = new Point(j,i);
                 switch (boardArray.get(i)[j]){
@@ -242,7 +256,7 @@ public class Board
     }
 
     public void printBoard(){
-        for(int i = 0; i<n; i++){
+        for(int i = n-1; i>-1; i--){
             for(int j = 0; j < n; j++){
                 Type t = board.get(new Point(j,i));
                 switch (t){

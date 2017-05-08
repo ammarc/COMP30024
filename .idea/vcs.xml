@@ -2,5 +2,9 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Assignments/aima-java-read-only/aima-core/src/main" vcs="svn" />
+    <mapping directory="$PROJECT_DIR$/Assignments/aima-java-read-only/aima-core/src/test" vcs="svn" />
+    <mapping directory="$PROJECT_DIR$/Assignments/aima-java-read-only/aima-gui/src/main" vcs="svn" />
+    <mapping directory="$PROJECT_DIR$/Assignments/aima-java-read-only/aimax-osm/src/main" vcs="svn" />
   </component>
 </project>
