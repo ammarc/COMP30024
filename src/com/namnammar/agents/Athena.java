@@ -5,6 +5,7 @@ package com.namnammar.agents; /**
  * For COMP30024 Part B
  */
 
+import java.sql.SQLSyntaxErrorException;
 import java.util.Scanner;
 import java.util.ArrayList;
 
@@ -16,12 +17,12 @@ import com.namnammar.components.Player;
 
 public class Athena implements SliderPlayer {
     private Board board;
-    private int dim;
+    private int dimension;
     private Player myPlayer;
 
     @Override
     public void init(int dimension, String board, char player) {
-        this.dim = dimension;
+        this.dimension = dimension;
         loadBoard(board);
         this.myPlayer = new Player(this.board.getHorizontalPieces(),
                 this.board.getVerticalPieces(), player);
@@ -32,24 +33,31 @@ public class Athena implements SliderPlayer {
     {
         if (move != null)
         {
-            int newRow = 0;
-            int newCol = 0;
+            System.err.println("Now updating board for: "+ myPlayer.getType());
+            int newRow = move.j;
+            int newCol = move.i;
             int row = move.j;
             int col = move.i;
 
             switch (move.d)
             {
                 case UP:
-                    newRow = row - 1;
+                    newRow++;
+                    break;
 
                 case DOWN:
-                    newRow = row + 1;
+                    // System.err.println("DOWN");
+                    newRow--;
+                    break;
 
                 case LEFT:
-                    newCol = col - 1;
+                    newCol--;
+                    break;
 
                 case RIGHT:
-                    newCol = col + 1;
+                    // System.err.println("RIGHT");
+                    newCol++;
+                    break;
             }
 
             board.updateBoard(row, col, newRow, newCol);
@@ -59,18 +67,29 @@ public class Athena implements SliderPlayer {
     @Override
     public Move move()
     {
+        System.err.println("Selecting a move now");
         if (this.myPlayer.getType() == 'H')
         {
             for (Piece p : board.getHorizontalPieces())
                 for (Boolean b : p.getDirection())
                     if (b && p.getDirection()[1])
-                        return new Move(p.getYPos(), p.getXPos(), Move.Direction.RIGHT);
+                    {
+                        Move m = new Move(p.getXPos(), p.getYPos(), Move.Direction.RIGHT);
+                        this.update(m);
+                        return m;
+                    }
+
         }
 
         for (Piece p : board.getVerticalPieces())
             for (Boolean b : p.getDirection())
                 if (b && p.getDirection()[2])
-                    return new Move(p.getYPos(), p.getXPos(), Move.Direction.UP);
+                {
+                    System.err.println("Move "+p.getXPos()+" "+p.getYPos());
+                    Move m = new Move(p.getXPos(), p.getYPos(), Move.Direction.UP);
+                    this.update(m);
+                    return m;
+                }
 
         return null;
     }
@@ -80,11 +99,11 @@ public class Athena implements SliderPlayer {
 
         Scanner in = new Scanner (board);
         /** An array of strings to store the board */
-        ArrayList<String[]> boardArray = new ArrayList<>(dim);
-        initializeArrayList(boardArray, dim);
+        ArrayList<String[]> boardArray = new ArrayList<>(dimension);
+        initializeArrayList(boardArray, dimension);
 
         /** Removing the spaces and adding to our board */
-        for (int i = dim - 1; i >= 0; i--)
+        for (int i = dimension - 1; i >= 0; i--)
         {
             String nextString = in.nextLine();
             String[] boardRow = nextString.split("\\s+");
@@ -93,7 +112,7 @@ public class Athena implements SliderPlayer {
 
         in.close();
         this.board = new Board(boardArray);
-        this.board.setN(dim);
+        this.board.setN(dimension);
         this.board.setUpPieces();
     }
 
@@ -106,8 +125,6 @@ public class Athena implements SliderPlayer {
     private static void initializeArrayList (ArrayList<String[]> arrayList, int size)
     {
         for (int i = 0; i < size; i++)
-        {
             arrayList.add (i, null);
-        }
     }
 }

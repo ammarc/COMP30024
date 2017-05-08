@@ -11,6 +11,7 @@ import com.namnammar.components.Horizontal;
 import com.namnammar.components.Obstacle;
 import com.namnammar.components.Piece;
 import com.namnammar.components.Vertical;
+import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 
 import java.util.ArrayList;
 
@@ -58,7 +59,7 @@ public class Board
             {
                 if (c.equals("H"))
                 {
-                    Horizontal horizontal = new Horizontal(i, j);
+                    Horizontal horizontal = new Horizontal(j, i);
                     /** Looking down, right, checking the case when the piece is
                      * on the right edge of the board and up respectively */
                     setHorizontalDir(horizontal);
@@ -68,7 +69,7 @@ public class Board
 
                 else if (c.equals("V"))
                 {
-                    Vertical vertical = new Vertical(i, j);
+                    Vertical vertical = new Vertical(j, i);
                     /** Looking  up, right, checking the case when the piece is
                      * on the top edge of the board and left respectively */
                     setVerticalDir(vertical);
@@ -78,7 +79,7 @@ public class Board
 
                 else if (c.equals("B"))
                 {
-                    Obstacle obs = new Obstacle(i, j);
+                    Obstacle obs = new Obstacle(j, i);
                     obstacles.add(obs);
                 }
                 j++;
@@ -91,11 +92,12 @@ public class Board
         String toMove = board.get(row)[col];
         // swap places of two cells on board
         board.get(row)[col] = "+";
+        System.err.println("Moving "+col+" " +row+" to "+newCol+" "+newRow);
         board.get(newRow)[newCol] = toMove;
 
         // find the piece
-        Piece moving = findPiece(row, col, toMove);
-        moving.setCoordinates(newRow, newCol);
+        Piece moving = findPiece(col, row, toMove);
+        moving.setCoordinates(newCol, newRow);
 
         // update the moved piece's direction and coordinates
         for (Piece h : horizontalPieces)
@@ -114,22 +116,22 @@ public class Board
 
     }
 
-    private Piece findPiece(int row, int column, String type)
+    private Piece findPiece(int column, int row, String type)
     {
         if (type.equals("H"))
         {
             for (Piece h : this.horizontalPieces)
-                if (h.getXPos() == row && h.getYPos() == column)
+                if (h.getXPos() == column && h.getYPos() == row)
                     return h;
         }
         else
         {
             for (Piece v : this.verticalPieces)
-                if (v.getXPos() == row && v.getYPos() == column)
+                if (v.getXPos() == column && v.getYPos() == row)
                     return v;
         }
 
-        System.err.println("ERROR: no piece found at " + row + ", " + column);
+        System.err.println("ERROR: no piece found at " + column + ", " + row);
         return null;
     }
 
@@ -139,22 +141,22 @@ public class Board
         int i = horizontal.getXPos();
         int j = horizontal.getYPos();
 
-        // Looking up
-        if (i > 0 && board.get(i-1)[j].equals("+")) horizontal.setUpTrue();
+        // Looking down
+        if (j > 0 && board.get(j-1)[i].equals("+")) horizontal.setDownTrue();
 
-        else horizontal.setUpFalse();
+        else horizontal.setDownFalse();
 
         // Looking right
-        if (j < n - 1 && board.get(i)[j+1].equals("+")) horizontal.setRightTrue();
+        if (i < n - 1 && board.get(j)[i+1].equals("+")) horizontal.setRightTrue();
 
-        else if (j == n - 1) horizontal.setRightTrue();
+        else if (i == n - 1) horizontal.setRightTrue();
 
         else horizontal.setRightFalse();
 
-        // Looking down
-        if (i < n - 1 && board.get(i+1)[j].equals("+")) horizontal.setDownTrue();
+        // Looking up
+        if (j < n - 1 && board.get(j+1)[i].equals("+")) horizontal.setUpTrue();
 
-        else horizontal.setDownFalse();
+        else horizontal.setUpFalse();
 
     }
 
@@ -165,19 +167,19 @@ public class Board
         int j = vertical.getYPos();
 
         // Looking up
-        if (i < n - 1 && board.get(i+1)[j].equals("+")) vertical.setUpTrue();
+        if (j < n - 1 && board.get(j+1)[i].equals("+")) vertical.setUpTrue();
 
-        else if (i == n - 1) vertical.setUpTrue();
+        else if (j == n - 1) vertical.setUpTrue();
 
         else vertical.setUpFalse();
 
         // Looking right
-        if (j < n - 1 && board.get(i)[j+1].equals("+")) vertical.setRightTrue();
+        if (i < n - 1 && board.get(j)[i+1].equals("+")) vertical.setRightTrue();
 
         else vertical.setRightFalse();
 
         // Looking left
-        if (j > 0 && board.get(i)[j-1].equals("+")) vertical.setLeftTrue();
+        if (i > 0 && board.get(j)[i-1].equals("+")) vertical.setLeftTrue();
 
         else vertical.setLeftFalse();
     }
@@ -216,8 +218,18 @@ public class Board
         return count;
     }
 
-    public void setFree (int row, int column)
+    public void printBoard()
     {
-        board.get(row)[column] = "+";
+        System.out.println("Printing the input board");
+        for (String s[] : board)
+        {
+            for (String c : s)
+            {
+                System.out.print(c + " ");
+            }
+            System.out.println();
+        }
+        System.out.println(board.get(0)[1]);
+        System.out.println();
     }
 }
