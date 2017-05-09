@@ -78,7 +78,7 @@ public class Athena implements SliderPlayer {
                         this.update(m);
                         return m;
                     }
-
+            return null;
         }
 
         for (Piece p : board.getVerticalPieces())

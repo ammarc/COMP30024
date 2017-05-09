@@ -92,12 +92,34 @@ public class Board
         String toMove = board.get(row)[col];
         // swap places of two cells on board
         board.get(row)[col] = "+";
-        System.err.println("Moving "+col+" " +row+" to "+newCol+" "+newRow);
-        board.get(newRow)[newCol] = toMove;
 
-        // find the piece
         Piece moving = findPiece(col, row, toMove);
-        moving.setCoordinates(newCol, newRow);
+
+        // we also need to check here if the piece is out of the board
+        // and then remove it from the board
+        if (newRow >= n || newCol >= n)
+        {
+            Piece toBeRemoved = null;
+            if (moving instanceof Horizontal)
+            {
+                for (Piece h : horizontalPieces)
+                    if (h.getXPos() == moving.getXPos() && h.getYPos() == moving.getYPos())
+                        toBeRemoved = h;
+                horizontalPieces.remove(toBeRemoved);
+            }
+            else
+            {
+                for (Piece v : verticalPieces)
+                    if (v.getXPos() == moving.getXPos() && v.getYPos() == moving.getYPos())
+                        toBeRemoved = v;
+                verticalPieces.remove(toBeRemoved);
+            }
+        }
+        else
+        {
+            board.get(newRow)[newCol] = toMove;
+            moving.setCoordinates(newCol, newRow);
+        }
 
         // update the moved piece's direction and coordinates
         for (Piece h : horizontalPieces)
