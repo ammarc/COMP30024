@@ -5,27 +5,21 @@ package com.namnammar.agents; /**
  * For COMP30024 Part B
  */
 
-import java.sql.SQLSyntaxErrorException;
-import java.util.Scanner;
-import java.util.ArrayList;
-
 import aiproj.slider.Move;
 import aiproj.slider.SliderPlayer;
 import com.namnammar.components.Board;
-import com.namnammar.components.Piece;
-import com.namnammar.components.Player;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+
 
 public class Athena implements SliderPlayer {
     private Board board;
-    private int dimension;
-    private Player myPlayer;
 
     @Override
-    public void init(int dimension, String board, char player) {
-        this.dimension = dimension;
-        loadBoard(board);
-        this.myPlayer = new Player(this.board.getHorizontalPieces(),
-                this.board.getVerticalPieces(), player);
+    public void init(int dimension, String board, char player)
+    {
+        this.board = new Board(board, dimension, player);
     }
 
     @Override
@@ -33,98 +27,139 @@ public class Athena implements SliderPlayer {
     {
         if (move != null)
         {
-            System.err.println("Now updating board for: "+ myPlayer.getType());
-            int newRow = move.j;
-            int newCol = move.i;
+            System.err.println("The other player made :" + move);
             int row = move.j;
             int col = move.i;
-
-            switch (move.d)
-            {
-                case UP:
-                    newRow++;
-                    break;
-
-                case DOWN:
-                    // System.err.println("DOWN");
-                    newRow--;
-                    break;
-
-                case LEFT:
-                    newCol--;
-                    break;
-
-                case RIGHT:
-                    // System.err.println("RIGHT");
-                    newCol++;
-                    break;
-            }
-
-            board.updateBoard(row, col, newRow, newCol);
+            this.board.updateBoard(row, col, move);
+            System.err.println("FROM THE OTHER GUY\n" + board);
         }
     }
 
     @Override
     public Move move()
     {
-        System.err.println("Selecting a move now");
-        if (this.myPlayer.getType() == 'H')
+        /*
+        if (board.getPlayer().getType() == 'H')
         {
             for (Piece p : board.getHorizontalPieces())
+            {
                 for (Boolean b : p.getDirection())
+                {
+                    System.err.println("Returning a move for horizontal "+b);
                     if (b && p.getDirection()[1])
                     {
                         Move m = new Move(p.getXPos(), p.getYPos(), Move.Direction.RIGHT);
                         this.update(m);
                         return m;
                     }
+                }
+            }
             return null;
         }
 
-        for (Piece p : board.getVerticalPieces())
-            for (Boolean b : p.getDirection())
-                if (b && p.getDirection()[2])
+        else if (board.getPlayer().getType() == 'V')
+        {
+            for (Piece p : board.getVerticalPieces())
+            {
+                for (Boolean b : p.getDirection())
                 {
-                    System.err.println("Move "+p.getXPos()+" "+p.getYPos());
-                    Move m = new Move(p.getXPos(), p.getYPos(), Move.Direction.UP);
-                    this.update(m);
-                    return m;
+                    if (b && p.getDirection()[2])
+                    {
+                        Move m = new Move(p.getXPos(), p.getYPos(), Move.Direction.UP);
+                        this.update(m);
+                        return m;
+                    }
                 }
+            }
+        }
+        return null;
+        */
+        int depth = 1;
+        Move mv = alphaBeta(board, depth, Integer.MIN_VALUE, Integer.MAX_VALUE);
+        this.board.updateBoard(mv.j, mv.i, mv);
+        System.err.println(board);
+        return mv;
+    }
 
+
+    /**
+     * Here Alpha-Beta pruning is applied to get the next move
+     * @return the next move the agent should make
+     */
+    protected static Move alphaBeta (Board board, int depth, int alpha, int beta)
+    {
+        int v = maxValue(board, alpha, beta, depth);
+
+        // finding the move with the given value
+
+        for (Move m : board.getPlayer().getLegalMoves().keySet()) {
+
+            if (board.getPlayer().getLegalMoves().get(m) == v)
+                return m;
+        }
+
+        System.err.println("Error: cannot find the next move to make");
         return null;
     }
 
-    private void loadBoard(String board)
+    protected static int maxValue(Board board, int alpha, int beta, int depth)
     {
+        if (board.isTerminal() || depth == 0)
+            return board.utility();
 
-        Scanner in = new Scanner (board);
-        /** An array of strings to store the board */
-        ArrayList<String[]> boardArray = new ArrayList<>(dimension);
-        initializeArrayList(boardArray, dimension);
+        int v = Integer.MIN_VALUE;
 
-        /** Removing the spaces and adding to our board */
-        for (int i = dimension - 1; i >= 0; i--)
+        int count = 0;
+
+        ArrayList<Move> legalMoves = new ArrayList<>();
+
+        for (Move m : board.getPlayer().getLegalMoves().keySet())
+            legalMoves.add(m);
+
+        Iterator<Move> iterator = legalMoves.iterator();
+
+        while (iterator.hasNext())
         {
-            String nextString = in.nextLine();
-            String[] boardRow = nextString.split("\\s+");
-            boardArray.set(i, boardRow);
-        }
+            Move move = iterator.next();
+            System.err.println("Count is "+count);
+            Board newBoard = new Board(board);
+            newBoard.updateBoard(move.j, move.i, move);
+            v = Integer.max(v, minValue(newBoard, alpha, beta, depth - 1));
+            board.getPlayer().setMoveValue(move, v);
+            alpha = Integer.max(alpha, v);
 
-        in.close();
-        this.board = new Board(boardArray);
-        this.board.setN(dimension);
-        this.board.setUpPieces();
+            count++;
+
+            if(beta <= alpha)
+                break;
+        }
+        return v;
     }
 
-    /**
-     * All the entries of the board are set to null first so that they can be set later
-     * without errors as the input begins with the (n - 1)th row
-     * @param arrayList the list to initialize
-     * @param size the size of the uninitialized array list
-     */
-    private static void initializeArrayList (ArrayList<String[]> arrayList, int size)
+    protected static int minValue(Board board, int alpha, int beta, int depth)
     {
-        for (int i = 0; i < size; i++)
-            arrayList.add (i, null);
+        if (board.isTerminal() || depth == 0)
+            return board.utility();
+        System.err.println("Fuck off ");
+        int v = Integer.MAX_VALUE;
+        ArrayList<Move> legalMoves = new ArrayList<>();
+
+        for (Move m : board.getOtherPlayer().getLegalMoves().keySet())
+            legalMoves.add(m);
+
+        Iterator<Move> iterator = legalMoves.iterator();
+
+        while (iterator.hasNext())
+        {
+            Move move = iterator.next();
+            Board newBoard = new Board(board);
+            newBoard.updateBoard(move.j, move.i, move);
+            v = Integer.min(v, maxValue(newBoard, alpha, beta, depth - 1));
+            beta = Integer.max(beta, v);
+
+            if(beta <= alpha)
+                break;
+        }
+        return v;
     }
 }

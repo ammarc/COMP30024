@@ -18,4 +18,8 @@ public class Horizontal extends Piece
     {
         super(x,y);
     }
+
+    public Horizontal(Horizontal other) {
+        super(other);
+    }
 }

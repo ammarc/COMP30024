@@ -7,96 +7,164 @@ package com.namnammar.components;
  * For COMP30024 Part A
  */
 
-import com.namnammar.components.Horizontal;
-import com.namnammar.components.Obstacle;
-import com.namnammar.components.Piece;
-import com.namnammar.components.Vertical;
-import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
+
+import aiproj.slider.Move;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Scanner;
+
+import static aiproj.slider.Move.Direction.*;
 
 
 public class Board
 {
     private int n;
-    private ArrayList<String[]> board;
+    private char[][] boardArray;
 
-    public ArrayList<Piece> getHorizontalPieces() {
+    public ArrayList<Horizontal> getHorizontalPieces() {
         return horizontalPieces;
     }
 
-    public ArrayList<Piece> getVerticalPieces() {
+    public ArrayList<Vertical> getVerticalPieces() {
         return verticalPieces;
     }
 
-    private ArrayList<Piece> horizontalPieces = new ArrayList<>();
-    private ArrayList<Piece> verticalPieces = new ArrayList<>();
+    private ArrayList<Horizontal> horizontalPieces = new ArrayList<>();
+    private ArrayList<Vertical> verticalPieces = new ArrayList<>();
     private ArrayList<Obstacle> obstacles = new ArrayList<>();
 
-    public void setN(int n) { this.n = n; }
+    private Player player;
+    private Player otherPlayer;
+
+    public Player getPlayer() {
+        return player;
+    }
+
+    public Player getOtherPlayer() {
+        return otherPlayer;
+    }
 
     public int getN() { return this.n; }
 
-    /**
-     * Constructor for this class
-     * @param boardArray 2-D board array
-     */
-    public Board (ArrayList<String[]> boardArray)
+    public Board (String rawBoard, int dimension, char player)
     {
-        this.board = boardArray;
+        Scanner in = new Scanner (rawBoard);
+        /** An array of strings to store the rawBoard */
+
+        boardArray = new char[dimension][];
+
+        for(int i = 0; i < dimension; i++)
+            boardArray[i] = new char[dimension];
+
+        /** Removing the spaces and adding to our rawBoard */
+        for (int i = dimension - 1; i >= 0; i--)
+        {
+            String nextString = in.nextLine();
+            String s = nextString.replaceAll("\\s+", "");
+            boardArray[i] = s.toCharArray();
+        }
+
+        in.close();
+
+        if(player == 'H')
+        {
+            this.player = new Player('H');
+            this.otherPlayer = new Player('V');
+        }
+        else
+        {
+            this.player = new Player('V');
+            this.otherPlayer = new Player('H');
+        }
+
+        this.n = dimension;
+        this.setUpPieces();
     }
 
     /**
-     * This method sets up the pieces on the board by looking around them
+     * This method sets up the pieces on the rawBoard by looking around them
      * and setting the boolean values of their directions correctly
      */
     public void setUpPieces ()
     {
         for (int i = 0; i < n; i++)
         {
-            int j = 0;
-            for (String c : board.get(i))
+            for(int j = 0; j < n; j++)
             {
-                if (c.equals("H"))
+                char c = boardArray[i][j];
+                if (c == 'H')
                 {
                     Horizontal horizontal = new Horizontal(j, i);
                     /** Looking down, right, checking the case when the piece is
-                     * on the right edge of the board and up respectively */
+                     * on the right edge of the rawBoard and up respectively */
                     setHorizontalDir(horizontal);
 
                     horizontalPieces.add(horizontal);
                 }
 
-                else if (c.equals("V"))
+                else if (c == 'V')
                 {
                     Vertical vertical = new Vertical(j, i);
                     /** Looking  up, right, checking the case when the piece is
-                     * on the top edge of the board and left respectively */
+                     * on the top edge of the rawBoard and left respectively */
                     setVerticalDir(vertical);
 
                     verticalPieces.add(vertical);
                 }
 
-                else if (c.equals("B"))
+                else if (c == 'B')
                 {
                     Obstacle obs = new Obstacle(j, i);
                     obstacles.add(obs);
                 }
-                j++;
             }
         }
     }
 
-    public void updateBoard(int row, int col, int newRow, int newCol)
+    public void updateBoard(int row, int col, Move move)
     {
-        String toMove = board.get(row)[col];
-        // swap places of two cells on board
-        board.get(row)[col] = "+";
+        int newRow = row;
+        int newCol = col;
 
+        switch (move.d)
+        {
+            case UP:    newRow++; break;
+
+            case DOWN:  newRow--; break;
+
+            case LEFT:  newCol--; break;
+
+            case RIGHT: newCol++; break;
+
+            default:              break;
+        }
+
+        char toMove = boardArray[row][col];
+        // swap places of two cells on rawBoard
         Piece moving = findPiece(col, row, toMove);
+        boardArray[row][col] = '+';
 
-        // we also need to check here if the piece is out of the board
-        // and then remove it from the board
+        // Removing moves that have been made
+        HashMap<Move, Integer> toRemove = new HashMap<>();
+        if(toMove == player.getType()) {
+            for(Move mv : player.getLegalMoves().keySet()) {
+                if(mv.i == col && mv.j == row) {
+                    toRemove.put(mv, player.getLegalMoves().get(mv));
+                }
+            }
+            player.removeMoves(toRemove);
+        }
+        else {
+            for(Move mv : otherPlayer.getLegalMoves().keySet()) {
+                if(mv.i == col && mv.j == row) {
+                    toRemove.put(mv, otherPlayer.getLegalMoves().get(mv));
+                }
+            }
+            otherPlayer.removeMoves(toRemove);
+        }
+
+        // and then remove it from the rawBoard
         if (newRow >= n || newCol >= n)
         {
             Piece toBeRemoved = null;
@@ -117,36 +185,57 @@ public class Board
         }
         else
         {
-            board.get(newRow)[newCol] = toMove;
+            boardArray[newRow][newCol] = toMove;
+            System.err.println(this);
+            System.err.println("--------------------------");
+            System.err.println("Setting coords for: "+col+ " " + row+" to "+newCol+ " " +newRow);
             moving.setCoordinates(newCol, newRow);
+            System.err.println("Vertical pieces are:");
+            for (Piece p : verticalPieces)
+                System.err.println(p);
+            System.err.println("Horizontal pieces are:");
+            for (Piece p : horizontalPieces)
+                System.err.println(p);
+            System.err.println("--------------------------");
         }
 
         // update the moved piece's direction and coordinates
         for (Piece h : horizontalPieces)
         {
-            if (Math.abs(h.getXPos() - moving.getXPos()) < 2 ||
-                    Math.abs(h.getYPos() - moving.getYPos()) < 2)
+            if (Math.abs(h.getXPos() - moving.getXPos()) <= 2 ||
+                    Math.abs(h.getYPos() - moving.getYPos()) <= 2)
                 setHorizontalDir(h);
         }
 
         for (Piece v : verticalPieces)
         {
-            if (Math.abs(v.getXPos() - moving.getXPos()) < 2 ||
-                    Math.abs(v.getYPos() - moving.getYPos()) < 2)
+            if (Math.abs(v.getXPos() - moving.getXPos()) <= 2 ||
+                    Math.abs(v.getYPos() - moving.getYPos()) <= 2)
                 setVerticalDir(v);
         }
 
     }
 
-    private Piece findPiece(int column, int row, String type)
+    private Piece findPiece(int column, int row, char type)
     {
-        if (type.equals("H"))
+        System.err.println("Now finding piece: "+type+" "+column+" "+row);
+        System.err.println("Vertical pieces are:");
+        for (Piece p : verticalPieces)
+            System.err.println(p);
+        System.err.println("Horizontal pieces are:");
+        for (Piece p : horizontalPieces)
+            System.err.println(p);
+        if (type == 'H')
         {
-            for (Piece h : this.horizontalPieces)
-                if (h.getXPos() == column && h.getYPos() == row)
+            for (Piece h : this.horizontalPieces) {
+                if (h.getXPos() == column && h.getYPos() == row) {
+                    System.err.println("Found bitch!");
                     return h;
+
+                }
+            }
         }
-        else
+        else if (type == 'V')
         {
             for (Piece v : this.verticalPieces)
                 if (v.getXPos() == column && v.getYPos() == row)
@@ -162,24 +251,64 @@ public class Board
     {
         int i = horizontal.getXPos();
         int j = horizontal.getYPos();
+        ArrayList<Move> newMoves = new ArrayList<>();
+        HashMap<Move, Integer> toBeRemoved = new HashMap<>();
 
         // Looking down
-        if (j > 0 && board.get(j-1)[i].equals("+")) horizontal.setDownTrue();
+        if (j > 0 && boardArray[j-1][i] == '+')
+        {
+            horizontal.setDownTrue();
+            newMoves.add(new Move(i, j, DOWN));
+        }
 
-        else horizontal.setDownFalse();
+        else
+        {
+            horizontal.setDownFalse();
+            toBeRemoved.put(new Move(i, j, DOWN), -1);
+        }
 
         // Looking right
-        if (i < n - 1 && board.get(j)[i+1].equals("+")) horizontal.setRightTrue();
+        if (i < n - 1 && boardArray[j][i+1] == '+')
+        {
+            horizontal.setRightTrue();
+            newMoves.add(new Move(i, j, RIGHT));
+        }
 
-        else if (i == n - 1) horizontal.setRightTrue();
+        else if (i == n - 1)
+        {
+            horizontal.setRightTrue();
+            newMoves.add(new Move(i, j, RIGHT));
+        }
 
-        else horizontal.setRightFalse();
+        else
+        {
+            horizontal.setRightFalse();
+            toBeRemoved.put(new Move(i, j, RIGHT), -1);
+        }
 
         // Looking up
-        if (j < n - 1 && board.get(j+1)[i].equals("+")) horizontal.setUpTrue();
+        if (j < n - 1 && boardArray[j+1][i] == '+')
+        {
+            horizontal.setUpTrue();
+            newMoves.add(new Move(i, j, UP));
+        }
 
-        else horizontal.setUpFalse();
+        else
+        {
+            horizontal.setUpFalse();
+            toBeRemoved.put(new Move(i, j, UP), -1);
+        }
 
+        if (player.getType() == 'H')
+        {
+            player.addMoves(newMoves);
+            player.removeMoves(toBeRemoved);
+        }
+        else
+        {
+            otherPlayer.addMoves(newMoves);
+            otherPlayer.removeMoves(toBeRemoved);
+        }
     }
 
     // TODO: Code duplication in both these methods
@@ -187,23 +316,66 @@ public class Board
     {
         int i = vertical.getXPos();
         int j = vertical.getYPos();
+        ArrayList<Move> newMoves = new ArrayList<>();
+        // TODO: removing from a hash map like this is not right; need to update this
+        HashMap<Move, Integer> toBeRemoved = new HashMap<>();
 
         // Looking up
-        if (j < n - 1 && board.get(j+1)[i].equals("+")) vertical.setUpTrue();
+        if (j < n - 1 && boardArray[j+1][i] == '+')
+        {
+            vertical.setUpTrue();
+            newMoves.add(new Move(i, j, UP));
+        }
 
-        else if (j == n - 1) vertical.setUpTrue();
+        else if (j == n - 1)
+        {
+            vertical.setUpTrue();
+            newMoves.add(new Move(i, j, UP));
+        }
 
-        else vertical.setUpFalse();
+        else
+        {
+            vertical.setUpFalse();
+            toBeRemoved.put(new Move(i, j, UP), -1);
+        }
 
         // Looking right
-        if (i < n - 1 && board.get(j)[i+1].equals("+")) vertical.setRightTrue();
+        if (i < n - 1 && boardArray[j][i+1] == '+')
+        {
+            vertical.setRightTrue();
+            newMoves.add(new Move(i, j, RIGHT));
+        }
 
-        else vertical.setRightFalse();
+        else
+        {
+            vertical.setRightFalse();
+            toBeRemoved.put(new Move(i, j, RIGHT), -1);
+        }
+
 
         // Looking left
-        if (i > 0 && board.get(j)[i-1].equals("+")) vertical.setLeftTrue();
+        if (i > 0 && boardArray[j][i-1] == '+')
+        {
+            vertical.setLeftTrue();
+            newMoves.add(new Move(i, j, LEFT));
+        }
 
-        else vertical.setLeftFalse();
+        else
+        {
+            vertical.setLeftFalse();
+            toBeRemoved.put(new Move(i, j, LEFT), -1);
+        }
+
+        if (player.getType() == 'V')
+        {
+            player.addMoves(newMoves);
+            player.removeMoves(toBeRemoved);
+        }
+        else
+        {
+            otherPlayer.addMoves(newMoves);
+            otherPlayer.removeMoves(toBeRemoved);
+        }
     }
 
     /**
@@ -240,18 +412,75 @@ public class Board
         return count;
     }
 
-    public void printBoard()
+
+    /**
+     * All the entries of the rawBoard are set to null first so that they can be set later
+     * without errors as the input begins with the (n - 1)th row
+     * @param arrayList the list to initialize
+     * @param size the size of the uninitialized array list
+     */
+    private static void initializeArrayList (ArrayList<String[]> arrayList, int size)
     {
-        System.out.println("Printing the input board");
-        for (String s[] : board)
+        for (int i = 0; i < size; i++)
+            arrayList.add (i, null);
+    }
+
+
+    // TODO: there are more terminal states of the rawBoard
+    public boolean isTerminal()
+    {
+        if (horizontalPieces.size() == 0 || verticalPieces.size() == 0)
+            return true;
+
+        return false;
+    }
+
+    // TODO: this is just a rudimentary utility function, make a real one
+    public int utility()
+    {
+        if (player.getType() == 'H')
+            return n - horizontalPieces.size();
+        return n - verticalPieces.size();
+    }
+
+    /**
+     * Copy constructor for the board
+     * @param other the source to be copied
+     */
+    public Board (Board other)
+    {
+        this.boardArray = new char[other.getN()][other.getN()];
+        this.verticalPieces = new ArrayList<>();
+        this.horizontalPieces = new ArrayList<>();
+        for (Horizontal p : other.getHorizontalPieces())
+            this.horizontalPieces.add(new Horizontal(p));
+        for (Vertical p : other.getVerticalPieces())
+            this.verticalPieces.add(new Vertical(p));
+        this.otherPlayer = new Player(other.otherPlayer.getType());
+        this.player = new Player(other.player.getType());
+        this.n = other.getN();
+        for (int i = 0; i < other.getN(); i++)
+            for (int j = 0; j < other.getN(); j++)
+                this.boardArray[i][j] = other.boardArray[i][j];
+
+        this.obstacles = (ArrayList<Obstacle>) other.obstacles.clone();
+    }
+    
+    public String toString()
+    {
+        String str = "\n--------The Board--------\n";
+        for (int i = this.n - 1; i >= 0; i--)
         {
-            for (String c : s)
-            {
-                System.out.print(c + " ");
-            }
-            System.out.println();
+            for(int j = 0; j < this.n; j++)
+                str += boardArray[i][j] + " ";
+            str += "\n";
         }
-        System.out.println(board.get(0)[1]);
-        System.out.println();
+        return str;
+    }
+
+    public void flipPlayers()
+    {
+        this.otherPlayer = (otherPlayer.getType() == 'V' ? new Player('H') : new Player('V'));
+        this.player = (player.getType() == 'V' ? new Player('H') : new Player('V'));
     }
 }

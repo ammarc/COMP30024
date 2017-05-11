@@ -38,10 +38,10 @@ public class Game
 
         in.close();
 
-        Board board = new Board(boardArray);
+        // Board board = new Board(boardArray);
 
-        System.out.println(board.numLegalHMoves());
-        System.out.println(board.numLegalVMoves());
+        // System.out.println(board.numLegalHMoves());
+        // System.out.println(board.numLegalVMoves());
     }
 
     /**

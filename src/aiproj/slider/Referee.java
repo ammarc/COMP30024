@@ -20,7 +20,7 @@ public class Referee {
 
 	/** Load provided classes, and play a game of Slider */
 	public static void main(String[] args) {
-
+		System.err.close();
 		/* * * *
 		 * first, read and validate command line options
 		 */

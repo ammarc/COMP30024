@@ -13,7 +13,7 @@ public abstract class Piece
     private int yPos;
 
     /** directions corresponding to Left, Right, Up, Down respectively */
-    private boolean[] direction = {false, false, false, false};
+    private boolean[] direction;
 
     private int numLegalMoves;
 
@@ -21,6 +21,19 @@ public abstract class Piece
     {
         this.xPos = x;
         this.yPos = y;
+        this.direction = new boolean[4];
+        for(int i = 0; i < 4; i++) {
+            direction[i] = false;
+        }
+    }
+
+    public Piece(Piece other) {
+        this.xPos = other.getXPos();
+        this.yPos = other.getYPos();
+        this.direction = new boolean[4];
+        for(int i = 0; i < 4; i++) {
+            direction[i] = other.getDirection()[i];
+        }
     }
 
     public int getXPos() { return xPos; }
@@ -63,5 +76,9 @@ public abstract class Piece
                 count++;
 
         this.numLegalMoves = count;
+    }
+
+    public String toString() {
+        return "(" + this.getXPos() + ", " + this.getYPos() + ")";
     }
 }
