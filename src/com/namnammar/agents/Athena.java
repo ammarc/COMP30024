@@ -8,6 +8,8 @@ package com.namnammar.agents; /**
 import aiproj.slider.Move;
 import aiproj.slider.SliderPlayer;
 import com.namnammar.components.Board;
+import com.namnammar.components.Horizontal;
+import com.namnammar.components.Vertical;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -28,9 +30,7 @@ public class Athena implements SliderPlayer {
         if (move != null)
         {
             System.err.println("The other player made :" + move);
-            int row = move.j;
-            int col = move.i;
-            this.board.updateBoard(row, col, move);
+            this.board.updateBoard(move);
             System.err.println("FROM THE OTHER GUY\n" + board);
         }
     }
@@ -38,45 +38,9 @@ public class Athena implements SliderPlayer {
     @Override
     public Move move()
     {
-        /*
-        if (board.getPlayer().getType() == 'H')
-        {
-            for (Piece p : board.getHorizontalPieces())
-            {
-                for (Boolean b : p.getDirection())
-                {
-                    System.err.println("Returning a move for horizontal "+b);
-                    if (b && p.getDirection()[1])
-                    {
-                        Move m = new Move(p.getXPos(), p.getYPos(), Move.Direction.RIGHT);
-                        this.update(m);
-                        return m;
-                    }
-                }
-            }
-            return null;
-        }
-
-        else if (board.getPlayer().getType() == 'V')
-        {
-            for (Piece p : board.getVerticalPieces())
-            {
-                for (Boolean b : p.getDirection())
-                {
-                    if (b && p.getDirection()[2])
-                    {
-                        Move m = new Move(p.getXPos(), p.getYPos(), Move.Direction.UP);
-                        this.update(m);
-                        return m;
-                    }
-                }
-            }
-        }
-        return null;
-        */
-        int depth = 1;
+        int depth = 7;
         Move mv = alphaBeta(board, depth, Integer.MIN_VALUE, Integer.MAX_VALUE);
-        this.board.updateBoard(mv.j, mv.i, mv);
+        this.board.updateBoard(mv);
         System.err.println(board);
         return mv;
     }
@@ -86,9 +50,9 @@ public class Athena implements SliderPlayer {
      * Here Alpha-Beta pruning is applied to get the next move
      * @return the next move the agent should make
      */
-    protected static Move alphaBeta (Board board, int depth, int alpha, int beta)
+    protected Move alphaBeta (Board board, int depth, int alpha, int beta)
     {
-        int v = maxValue(board, alpha, beta, depth);
+        double v = maxValue(board, alpha, beta, depth);
 
         // finding the move with the given value
 
@@ -102,14 +66,12 @@ public class Athena implements SliderPlayer {
         return null;
     }
 
-    protected static int maxValue(Board board, int alpha, int beta, int depth)
+    protected double maxValue(Board board, double alpha, double beta, int depth)
     {
         if (board.isTerminal() || depth == 0)
-            return board.utility();
+            return calculateUtilityDiff(board);
 
-        int v = Integer.MIN_VALUE;
-
-        int count = 0;
+        double v = Integer.MIN_VALUE;
 
         ArrayList<Move> legalMoves = new ArrayList<>();
 
@@ -121,14 +83,11 @@ public class Athena implements SliderPlayer {
         while (iterator.hasNext())
         {
             Move move = iterator.next();
-            System.err.println("Count is "+count);
             Board newBoard = new Board(board);
-            newBoard.updateBoard(move.j, move.i, move);
-            v = Integer.max(v, minValue(newBoard, alpha, beta, depth - 1));
+            newBoard.updateBoard(move);
+            v = Math.max(v, minValue(newBoard, alpha, beta, depth - 1));
             board.getPlayer().setMoveValue(move, v);
-            alpha = Integer.max(alpha, v);
-
-            count++;
+            alpha = Math.max(alpha, v);
 
             if(beta <= alpha)
                 break;
@@ -136,12 +95,11 @@ public class Athena implements SliderPlayer {
         return v;
     }
 
-    protected static int minValue(Board board, int alpha, int beta, int depth)
+    protected double minValue(Board board, double alpha, double beta, int depth)
     {
         if (board.isTerminal() || depth == 0)
-            return board.utility();
-        System.err.println("Fuck off ");
-        int v = Integer.MAX_VALUE;
+            return calculateUtilityDiff(board);
+        double v = Integer.MAX_VALUE;
         ArrayList<Move> legalMoves = new ArrayList<>();
 
         for (Move m : board.getOtherPlayer().getLegalMoves().keySet())
@@ -153,13 +111,39 @@ public class Athena implements SliderPlayer {
         {
             Move move = iterator.next();
             Board newBoard = new Board(board);
-            newBoard.updateBoard(move.j, move.i, move);
-            v = Integer.min(v, maxValue(newBoard, alpha, beta, depth - 1));
-            beta = Integer.max(beta, v);
+            newBoard.updateBoard(move);
+            v = Math.min(v, maxValue(newBoard, alpha, beta, depth - 1));
+            beta = Math.min(beta, v);
 
             if(beta <= alpha)
                 break;
         }
         return v;
     }
+
+   // TODO: this is just a rudimentary utility function, make a real one
+    public double boardUtility(Board board)  {
+        int score = 0;
+        if(board.getPlayer().getType() == 'H') {
+            for(Horizontal h : board.getHorizontalPieces())
+            {
+                score += h.getXPos();
+            }
+            score *= board.getN() - board.getHorizontalPieces().size();
+        }
+        else if(board.getPlayer().getType() == 'V') {
+            for(Vertical v : board.getVerticalPieces()) {
+                score += v.getYPos();
+            }
+            score *= board.getN() - board.getVerticalPieces().size();
+        }
+
+        return score;
+    }
+
+    public double calculateUtilityDiff(Board newBoard)
+    {
+        return boardUtility(newBoard) - boardUtility(this.board);
+    }
+
 }

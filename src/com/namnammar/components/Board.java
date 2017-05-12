@@ -21,6 +21,7 @@ public class Board
 {
     private int n;
     private char[][] boardArray;
+    private int utility;
 
     public ArrayList<Horizontal> getHorizontalPieces() {
         return horizontalPieces;
@@ -122,8 +123,10 @@ public class Board
         }
     }
 
-    public void updateBoard(int row, int col, Move move)
+    public void updateBoard(Move move)
     {
+        int col = move.i;
+        int row = move.j;
         int newRow = row;
         int newCol = col;
 
@@ -146,7 +149,7 @@ public class Board
         boardArray[row][col] = '+';
 
         // Removing moves that have been made
-        HashMap<Move, Integer> toRemove = new HashMap<>();
+        HashMap<Move, Double> toRemove = new HashMap<>();
         if(toMove == player.getType()) {
             for(Move mv : player.getLegalMoves().keySet()) {
                 if(mv.i == col && mv.j == row) {
@@ -252,7 +255,7 @@ public class Board
         int i = horizontal.getXPos();
         int j = horizontal.getYPos();
         ArrayList<Move> newMoves = new ArrayList<>();
-        HashMap<Move, Integer> toBeRemoved = new HashMap<>();
+        HashMap<Move, Double> toBeRemoved = new HashMap<>();
 
         // Looking down
         if (j > 0 && boardArray[j-1][i] == '+')
@@ -264,7 +267,7 @@ public class Board
         else
         {
             horizontal.setDownFalse();
-            toBeRemoved.put(new Move(i, j, DOWN), -1);
+            toBeRemoved.put(new Move(i, j, DOWN), -1.0);
         }
 
         // Looking right
@@ -283,7 +286,7 @@ public class Board
         else
         {
             horizontal.setRightFalse();
-            toBeRemoved.put(new Move(i, j, RIGHT), -1);
+            toBeRemoved.put(new Move(i, j, RIGHT), -1.0);
         }
 
         // Looking up
@@ -296,7 +299,7 @@ public class Board
         else
         {
             horizontal.setUpFalse();
-            toBeRemoved.put(new Move(i, j, UP), -1);
+            toBeRemoved.put(new Move(i, j, UP), -1.0);
         }
 
         if (player.getType() == 'H')
@@ -318,7 +321,7 @@ public class Board
         int j = vertical.getYPos();
         ArrayList<Move> newMoves = new ArrayList<>();
         // TODO: removing from a hash map like this is not right; need to update this
-        HashMap<Move, Integer> toBeRemoved = new HashMap<>();
+        HashMap<Move, Double> toBeRemoved = new HashMap<>();
 
         // Looking up
         if (j < n - 1 && boardArray[j+1][i] == '+')
@@ -336,7 +339,7 @@ public class Board
         else
         {
             vertical.setUpFalse();
-            toBeRemoved.put(new Move(i, j, UP), -1);
+            toBeRemoved.put(new Move(i, j, UP), -1.0);
         }
 
         // Looking right
@@ -349,7 +352,7 @@ public class Board
         else
         {
             vertical.setRightFalse();
-            toBeRemoved.put(new Move(i, j, RIGHT), -1);
+            toBeRemoved.put(new Move(i, j, RIGHT), -1.0);
         }
 
 
@@ -363,7 +366,7 @@ public class Board
         else
         {
             vertical.setLeftFalse();
-            toBeRemoved.put(new Move(i, j, LEFT), -1);
+            toBeRemoved.put(new Move(i, j, LEFT), -1.0);
         }
 
         if (player.getType() == 'V')
@@ -413,19 +416,6 @@ public class Board
     }
 
 
-    /**
-     * All the entries of the rawBoard are set to null first so that they can be set later
-     * without errors as the input begins with the (n - 1)th row
-     * @param arrayList the list to initialize
-     * @param size the size of the uninitialized array list
-     */
-    private static void initializeArrayList (ArrayList<String[]> arrayList, int size)
-    {
-        for (int i = 0; i < size; i++)
-            arrayList.add (i, null);
-    }
-
-
     // TODO: there are more terminal states of the rawBoard
     public boolean isTerminal()
     {
@@ -436,11 +426,26 @@ public class Board
     }
 
     // TODO: this is just a rudimentary utility function, make a real one
-    public int utility()
+    public int utility()  {
+        int score = 0;
+        if(player.getType() == 'H') {
+            for(Horizontal h : horizontalPieces)
+            {
+                score += h.getXPos();
+            }
+        }
+        else if(player.getType() == 'V') {
+            for(Vertical v : verticalPieces) {
+                score += v.getYPos();
+            }
+        }
+
+        return score;
+    }
+
+    public int calculateUtilityDiff(Board oldBoard, Board newBoard)
     {
-        if (player.getType() == 'H')
-            return n - horizontalPieces.size();
-        return n - verticalPieces.size();
+        return newBoard.utility() - oldBoard.utility();
     }
 
     /**
@@ -476,11 +481,5 @@ public class Board
             str += "\n";
         }
         return str;
-    }
-
-    public void flipPlayers()
-    {
-        this.otherPlayer = (otherPlayer.getType() == 'V' ? new Player('H') : new Player('V'));
-        this.player = (player.getType() == 'V' ? new Player('H') : new Player('V'));
     }
 }

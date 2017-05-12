@@ -10,7 +10,7 @@ import java.util.Iterator;
 public class Player
 {
     // pieces that the player && opponentPieces controls
-    private HashMap<Move, Integer> legalMoves;
+    private HashMap<Move, Double> legalMoves;
     private char type;
 
     public Player(char player)
@@ -21,7 +21,7 @@ public class Player
 
     public char getType() { return type; }
 
-    public HashMap<Move, Integer> getLegalMoves()
+    public HashMap<Move, Double> getLegalMoves()
     {
         return this.legalMoves;
     }
@@ -29,7 +29,7 @@ public class Player
     public void addMoves(ArrayList<Move> moves)
     {
         for (Move move : moves)
-            legalMoves.put(move, -1);
+            legalMoves.put(move, -1.0);
     }
 
     public void removeMove(Move move) {
@@ -51,13 +51,13 @@ public class Player
         }
     }
 
-    public void removeMoves(HashMap<Move, Integer> removals) {
+    public void removeMoves(HashMap<Move, Double> removals) {
         for(Move move : removals.keySet()) {
             removeMove(move);
         }
     }
 
-    public void setMoveValue(Move move, int value)
+    public void setMoveValue(Move move, double value)
     {
         legalMoves.put(move, value);
     }
