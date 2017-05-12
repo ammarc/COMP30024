@@ -2,26 +2,24 @@ package com.namnammar.components;
 
 import aiproj.slider.Move;
 
-import java.awt.image.AreaAveragingScaleFilter;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 
 public class Player
 {
     // pieces that the player && opponentPieces controls
-    private HashMap<Move, Double> legalMoves;
+    private ArrayList<Move> legalMoves;
     private char type;
 
     public Player(char player)
     {
         this.type = player;
-        legalMoves = new HashMap<>();
+        legalMoves = new ArrayList<>();
     }
 
     public char getType() { return type; }
 
-    public HashMap<Move, Double> getLegalMoves()
+    public ArrayList<Move> getLegalMoves()
     {
         return this.legalMoves;
     }
@@ -29,36 +27,15 @@ public class Player
     public void addMoves(ArrayList<Move> moves)
     {
         for (Move move : moves)
-            legalMoves.put(move, -1.0);
+            legalMoves.add(move);
     }
 
-    public void removeMove(Move move) {
-        if (legalMoves.containsKey(move))
-            legalMoves.remove(move);
-        else
-        {
-            ArrayList<Move> toBeRemoved = new ArrayList<>();
-            for (Move nextMove : legalMoves.keySet())
-            {
-                if (nextMove.i == move.i && nextMove.j == move.j && nextMove.d == move.d)
-                {
-                    toBeRemoved.add(nextMove);
-                }
-            }
-            for (Move mv : toBeRemoved)
-                legalMoves.remove(mv);
-            toBeRemoved.clear();
-        }
-    }
 
-    public void removeMoves(HashMap<Move, Double> removals) {
-        for(Move move : removals.keySet()) {
-            removeMove(move);
-        }
-    }
-
-    public void setMoveValue(Move move, double value)
+    public void removeMoves(ArrayList<Move> removals)
     {
-        legalMoves.put(move, value);
+        for(Move move : removals)
+        {
+            legalMoves.remove(move);
+        }
     }
 }

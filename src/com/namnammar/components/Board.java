@@ -123,6 +123,101 @@ public class Board
         }
     }
 
+    public void undoMove(Move move, char type)
+    {
+
+        // If the row was 0 and column was 1, and went up
+        // newRow was 1 and column was 1.
+        // Now when you want to undo 0, 1 up. You find newRow,
+        // newColumn into a +
+        int col = move.i;
+        int row = move.j;
+        int newRow = row;
+        int newCol = col;
+
+        switch (move.d)
+        {
+            case UP:    newRow++; break;
+
+            case DOWN:  newRow--; break;
+
+            case LEFT:  newCol--; break;
+
+            case RIGHT: newCol++; break;
+
+            default:              break;
+        }
+        char toMove;
+        Piece moving;
+        if(newRow < n && newCol < n) {
+            toMove = type;
+            boardArray[newRow][newCol] = '+';
+            moving = findPiece(newCol, newRow, toMove);
+            moving.setCoordinates(col, row);
+            ArrayList<Move> toRemove = new ArrayList<>();
+
+            if(toMove == player.getType()) {
+                for(Move mv : player.getLegalMoves()) {
+                    if(mv.i == newCol && mv.j == newRow) {
+                      toRemove.add(mv);
+                }
+            }
+                //player.removeMoves(toRemove);
+            }
+            else {
+                for(Move mv : otherPlayer.getLegalMoves())
+                {
+                    if(mv.i == newCol && mv.j == newRow) {
+                        toRemove.add(mv);
+                    }
+                }
+                //therPlayer.removeMoves(toRemove);
+            }
+
+
+        }
+        else {
+            toMove = type;
+
+            if(type == 'H') {
+                moving = new Horizontal(col, row);
+                horizontalPieces.add((Horizontal) moving);
+            }
+            else {
+                moving = new Vertical(col, row);
+                verticalPieces.add((Vertical) moving);
+            }
+        }
+
+        // swap places of two cells on rawBoard
+
+        // Removing moves that have been made
+
+        boardArray[row][col] = toMove;
+
+        // update the moved piece's direction and coordinates
+        for (Piece h : horizontalPieces)
+        {
+            if (Math.abs(h.getXPos() - moving.getXPos()) <= 2 ||
+                    Math.abs(h.getYPos() - moving.getYPos()) <= 2)
+                setHorizontalDir(h);
+        }
+
+        for (Piece v : verticalPieces)
+        {
+            if (Math.abs(v.getXPos() - moving.getXPos()) <= 2 ||
+                    Math.abs(v.getYPos() - moving.getYPos()) <= 2)
+                setVerticalDir(v);
+        }
+
+
+        System.err.println("From undo:");
+        System.err.println(this);
+        System.err.println(player.getType() + " has " + player.getLegalMoves().size() + " moves. Ok. Bye.");
+        System.err.println(otherPlayer.getType() + " has " + otherPlayer.getLegalMoves().size() + " moves. Ok. Bye.");
+
+    }
+
     public void updateBoard(Move move)
     {
         int col = move.i;
@@ -149,90 +244,99 @@ public class Board
         boardArray[row][col] = '+';
 
         // Removing moves that have been made
-        HashMap<Move, Double> toRemove = new HashMap<>();
+        ArrayList<Move> toRemove = new ArrayList<>();
         if(toMove == player.getType()) {
-            for(Move mv : player.getLegalMoves().keySet()) {
+            for(Move mv : player.getLegalMoves()) {
                 if(mv.i == col && mv.j == row) {
-                    toRemove.put(mv, player.getLegalMoves().get(mv));
+                    toRemove.add(mv);
                 }
             }
             player.removeMoves(toRemove);
         }
         else {
-            for(Move mv : otherPlayer.getLegalMoves().keySet()) {
+            for(Move mv : otherPlayer.getLegalMoves())
+            {
                 if(mv.i == col && mv.j == row) {
-                    toRemove.put(mv, otherPlayer.getLegalMoves().get(mv));
+                    toRemove.add(mv);
                 }
             }
             otherPlayer.removeMoves(toRemove);
         }
 
-        // and then remove it from the rawBoard
+        // Checks if the moves made were out of the board
         if (newRow >= n || newCol >= n)
         {
-            Piece toBeRemoved = null;
-            if (moving instanceof Horizontal)
+            Piece pieceToBeRemoved = null;
+            if (toMove == 'H')
             {
                 for (Piece h : horizontalPieces)
                     if (h.getXPos() == moving.getXPos() && h.getYPos() == moving.getYPos())
-                        toBeRemoved = h;
-                horizontalPieces.remove(toBeRemoved);
+                        pieceToBeRemoved = h;
+                horizontalPieces.remove(pieceToBeRemoved);
             }
-            else
+            else if (toMove == 'V')
             {
                 for (Piece v : verticalPieces)
                     if (v.getXPos() == moving.getXPos() && v.getYPos() == moving.getYPos())
-                        toBeRemoved = v;
-                verticalPieces.remove(toBeRemoved);
+                        pieceToBeRemoved = v;
+                verticalPieces.remove(pieceToBeRemoved);
             }
         }
         else
         {
             boardArray[newRow][newCol] = toMove;
-            System.err.println(this);
+            moving.setCoordinates(newCol, newRow);
+            /*System.err.println(this);
             System.err.println("--------------------------");
             System.err.println("Setting coords for: "+col+ " " + row+" to "+newCol+ " " +newRow);
-            moving.setCoordinates(newCol, newRow);
             System.err.println("Vertical pieces are:");
             for (Piece p : verticalPieces)
                 System.err.println(p);
             System.err.println("Horizontal pieces are:");
             for (Piece p : horizontalPieces)
                 System.err.println(p);
-            System.err.println("--------------------------");
+            System.err.println("--------------------------");*/
         }
 
         // update the moved piece's direction and coordinates
+        player.getLegalMoves().clear();
+        otherPlayer.getLegalMoves().clear();
         for (Piece h : horizontalPieces)
         {
-            if (Math.abs(h.getXPos() - moving.getXPos()) <= 2 ||
+            setHorizontalDir(h);
+            /*if (Math.abs(h.getXPos() - moving.getXPos()) <= 2 ||
                     Math.abs(h.getYPos() - moving.getYPos()) <= 2)
-                setHorizontalDir(h);
+                setHorizontalDir(h);*/
         }
 
         for (Piece v : verticalPieces)
         {
-            if (Math.abs(v.getXPos() - moving.getXPos()) <= 2 ||
+            setVerticalDir(v);
+            /*if (Math.abs(v.getXPos() - moving.getXPos()) <= 2 ||
                     Math.abs(v.getYPos() - moving.getYPos()) <= 2)
-                setVerticalDir(v);
+                setVerticalDir(v);*/
         }
+        System.err.println("From the end of update:");
+        System.err.println(this);
+        System.err.println(player.getType() + " has " + player.getLegalMoves().size() + " moves. Ok. Bye.");
+        System.err.println(otherPlayer.getType() + " has " + otherPlayer.getLegalMoves().size() + " moves. Ok. Bye.");
+        System.err.println("--------------\n");
 
     }
 
     private Piece findPiece(int column, int row, char type)
     {
-        System.err.println("Now finding piece: "+type+" "+column+" "+row);
-        System.err.println("Vertical pieces are:");
-        for (Piece p : verticalPieces)
-            System.err.println(p);
-        System.err.println("Horizontal pieces are:");
-        for (Piece p : horizontalPieces)
-            System.err.println(p);
+        // System.err.println("Now finding piece: "+type+" "+column+" "+row);
+        // System.err.println("Vertical pieces are:");
+        // for (Piece p : verticalPieces)
+           // System.err.println(p);
+        // System.err.println("Horizontal pieces are:");
+        //for (Piece p : horizontalPieces)
+          //  System.err.println(p);
         if (type == 'H')
         {
             for (Piece h : this.horizontalPieces) {
                 if (h.getXPos() == column && h.getYPos() == row) {
-                    System.err.println("Found bitch!");
                     return h;
 
                 }
@@ -245,7 +349,9 @@ public class Board
                     return v;
         }
 
-        System.err.println("ERROR: no piece found at " + column + ", " + row);
+        System.err.println("ERROR: no piece found at " + column + ", " + row+"\nThe board is:");
+        System.err.println(this);
+        System.err.println("----------------------");
         return null;
     }
 
@@ -255,7 +361,6 @@ public class Board
         int i = horizontal.getXPos();
         int j = horizontal.getYPos();
         ArrayList<Move> newMoves = new ArrayList<>();
-        HashMap<Move, Double> toBeRemoved = new HashMap<>();
 
         // Looking down
         if (j > 0 && boardArray[j-1][i] == '+')
@@ -267,7 +372,6 @@ public class Board
         else
         {
             horizontal.setDownFalse();
-            toBeRemoved.put(new Move(i, j, DOWN), -1.0);
         }
 
         // Looking right
@@ -286,7 +390,6 @@ public class Board
         else
         {
             horizontal.setRightFalse();
-            toBeRemoved.put(new Move(i, j, RIGHT), -1.0);
         }
 
         // Looking up
@@ -299,18 +402,17 @@ public class Board
         else
         {
             horizontal.setUpFalse();
-            toBeRemoved.put(new Move(i, j, UP), -1.0);
         }
 
         if (player.getType() == 'H')
         {
             player.addMoves(newMoves);
-            player.removeMoves(toBeRemoved);
+            newMoves.clear();
         }
         else
         {
             otherPlayer.addMoves(newMoves);
-            otherPlayer.removeMoves(toBeRemoved);
+            newMoves.clear();
         }
     }
 
@@ -320,8 +422,6 @@ public class Board
         int i = vertical.getXPos();
         int j = vertical.getYPos();
         ArrayList<Move> newMoves = new ArrayList<>();
-        // TODO: removing from a hash map like this is not right; need to update this
-        HashMap<Move, Double> toBeRemoved = new HashMap<>();
 
         // Looking up
         if (j < n - 1 && boardArray[j+1][i] == '+')
@@ -339,7 +439,6 @@ public class Board
         else
         {
             vertical.setUpFalse();
-            toBeRemoved.put(new Move(i, j, UP), -1.0);
         }
 
         // Looking right
@@ -352,7 +451,6 @@ public class Board
         else
         {
             vertical.setRightFalse();
-            toBeRemoved.put(new Move(i, j, RIGHT), -1.0);
         }
 
 
@@ -366,18 +464,15 @@ public class Board
         else
         {
             vertical.setLeftFalse();
-            toBeRemoved.put(new Move(i, j, LEFT), -1.0);
         }
 
         if (player.getType() == 'V')
         {
             player.addMoves(newMoves);
-            player.removeMoves(toBeRemoved);
         }
         else
         {
             otherPlayer.addMoves(newMoves);
-            otherPlayer.removeMoves(toBeRemoved);
         }
     }
 

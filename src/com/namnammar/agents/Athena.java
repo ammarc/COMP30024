@@ -38,10 +38,10 @@ public class Athena implements SliderPlayer {
     @Override
     public Move move()
     {
-        int depth = 7;
+        int depth = 8;
         Move mv = alphaBeta(board, depth, Integer.MIN_VALUE, Integer.MAX_VALUE);
-        this.board.updateBoard(mv);
-        System.err.println(board);
+        if (mv != null)
+            this.board.updateBoard(mv);
         return mv;
     }
 
@@ -50,20 +50,35 @@ public class Athena implements SliderPlayer {
      * Here Alpha-Beta pruning is applied to get the next move
      * @return the next move the agent should make
      */
-    protected Move alphaBeta (Board board, int depth, int alpha, int beta)
+    protected Move alphaBeta (Board board, int depth, double alpha, double beta)
     {
-        double v = maxValue(board, alpha, beta, depth);
+        System.err.println("Starting alpha beta");
+        double v;
+        double maxValue = Integer.MIN_VALUE;
+        Move maxMove = null;
+        ArrayList<Move> legalMoves = new ArrayList<>();
 
-        // finding the move with the given value
+        legalMoves.addAll(board.getPlayer().getLegalMoves());
+        Board newBoard;
 
-        for (Move m : board.getPlayer().getLegalMoves().keySet()) {
-
-            if (board.getPlayer().getLegalMoves().get(m) == v)
-                return m;
+        for (Move move : legalMoves)
+        {
+            System.err.println("Going through moves in alpha beta");
+            newBoard = new Board(board);
+            newBoard.updateBoard(move);
+            v = minValue(newBoard, alpha, beta, depth - 1);
+            if (v > maxValue)
+            {
+                maxValue = v;
+                maxMove = new Move(move.i, move.j, move.d);
+            }
+            alpha = Math.max(alpha, v);
+            if (beta <= alpha)
+                break;
         }
+        System.err.println("-------Ending Alpha Beta---------");
 
-        System.err.println("Error: cannot find the next move to make");
-        return null;
+        return maxMove;
     }
 
     protected double maxValue(Board board, double alpha, double beta, int depth)
@@ -74,21 +89,21 @@ public class Athena implements SliderPlayer {
         double v = Integer.MIN_VALUE;
 
         ArrayList<Move> legalMoves = new ArrayList<>();
-
-        for (Move m : board.getPlayer().getLegalMoves().keySet())
-            legalMoves.add(m);
+        legalMoves.addAll(board.getPlayer().getLegalMoves());
 
         Iterator<Move> iterator = legalMoves.iterator();
 
+        Board newBoard;
+
         while (iterator.hasNext())
         {
+            newBoard = new Board(board);
             Move move = iterator.next();
-            Board newBoard = new Board(board);
+
             newBoard.updateBoard(move);
             v = Math.max(v, minValue(newBoard, alpha, beta, depth - 1));
-            board.getPlayer().setMoveValue(move, v);
             alpha = Math.max(alpha, v);
-
+            // board.undoMove(move, board.getPlayer().getType());
             if(beta <= alpha)
                 break;
         }
@@ -101,20 +116,19 @@ public class Athena implements SliderPlayer {
             return calculateUtilityDiff(board);
         double v = Integer.MAX_VALUE;
         ArrayList<Move> legalMoves = new ArrayList<>();
-
-        for (Move m : board.getOtherPlayer().getLegalMoves().keySet())
-            legalMoves.add(m);
+        legalMoves.addAll(board.getOtherPlayer().getLegalMoves());
 
         Iterator<Move> iterator = legalMoves.iterator();
+        Board newBoard;
 
         while (iterator.hasNext())
         {
+            newBoard = new Board(board);
             Move move = iterator.next();
-            Board newBoard = new Board(board);
             newBoard.updateBoard(move);
             v = Math.min(v, maxValue(newBoard, alpha, beta, depth - 1));
             beta = Math.min(beta, v);
-
+            // board.undoMove(move, board.getOtherPlayer().getType());
             if(beta <= alpha)
                 break;
         }
@@ -123,19 +137,21 @@ public class Athena implements SliderPlayer {
 
    // TODO: this is just a rudimentary utility function, make a real one
     public double boardUtility(Board board)  {
-        int score = 0;
+        double score = 1;
         if(board.getPlayer().getType() == 'H') {
             for(Horizontal h : board.getHorizontalPieces())
             {
-                score += h.getXPos();
+                score += h.getXPos() * 0.25;
             }
-            score *= board.getN() - board.getHorizontalPieces().size();
+            for (int i = 0; i < (board.getN() - board.getHorizontalPieces().size() - 1); i++)
+                score *= 10;
         }
         else if(board.getPlayer().getType() == 'V') {
             for(Vertical v : board.getVerticalPieces()) {
-                score += v.getYPos();
+                score += v.getYPos() * 0.25;
             }
-            score *= board.getN() - board.getVerticalPieces().size();
+            for (int i = 0; i < (board.getN() - board.getVerticalPieces().size() - 1); i++)
+                score *= 10;
         }
 
         return score;
