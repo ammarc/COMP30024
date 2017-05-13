@@ -143,7 +143,6 @@ public class Athena implements SliderPlayer {
         return v;
     }
 
-   // TODO: this is just a rudimentary utility function, make a real one
     public double boardUtility(Board board) {
         double score = 1;
         if(board.getPlayer().getType() == 'H') {

@@ -525,24 +525,6 @@ public class Board
         return false;
     }
 
-    // TODO: this is just a rudimentary utility function, make a real one
-    public int utility()  {
-        int score = 0;
-        if(player.getType() == 'H') {
-            for(Horizontal h : horizontalPieces)
-            {
-                score += h.getXPos();
-            }
-        }
-        else if(player.getType() == 'V') {
-            for(Vertical v : verticalPieces) {
-                score += v.getYPos();
-            }
-        }
-
-        return score;
-    }
-
     /**
      * Copy constructor for the board
      * @param other the source to be copied
