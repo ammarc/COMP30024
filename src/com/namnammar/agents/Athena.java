@@ -42,6 +42,7 @@ public class Athena implements SliderPlayer {
         Move mv = alphaBeta(board, depth, Integer.MIN_VALUE, Integer.MAX_VALUE);
         if (mv != null)
             this.board.updateBoard(mv);
+        board.getPlayer().setNumLateralMoves(0);
         return mv;
     }
 
@@ -66,12 +67,15 @@ public class Athena implements SliderPlayer {
             System.err.println("Going through moves in alpha beta");
             newBoard = new Board(board);
             newBoard.updateBoard(move);
+            //board.updateBoard(move);
             v = minValue(newBoard, alpha, beta, depth - 1);
+            //v = minValue(board, alpha, beta, depth - 1);
             if (v > maxValue)
             {
                 maxValue = v;
                 maxMove = new Move(move.i, move.j, move.d);
             }
+            //board.undoMove(move, board.getPlayer().getType());
             alpha = Math.max(alpha, v);
             if (beta <= alpha)
                 break;
@@ -101,9 +105,11 @@ public class Athena implements SliderPlayer {
             Move move = iterator.next();
 
             newBoard.updateBoard(move);
+            //board.updateBoard(move);
             v = Math.max(v, minValue(newBoard, alpha, beta, depth - 1));
+            //v = Math.max(v, minValue(board, alpha, beta, depth - 1));
             alpha = Math.max(alpha, v);
-            // board.undoMove(move, board.getPlayer().getType());
+            //board.undoMove(move, board.getPlayer().getType());
             if(beta <= alpha)
                 break;
         }
@@ -126,9 +132,11 @@ public class Athena implements SliderPlayer {
             newBoard = new Board(board);
             Move move = iterator.next();
             newBoard.updateBoard(move);
+            //board.updateBoard(move);
             v = Math.min(v, maxValue(newBoard, alpha, beta, depth - 1));
+            //v = Math.min(v, maxValue(board, alpha, beta, depth - 1));
             beta = Math.min(beta, v);
-            // board.undoMove(move, board.getOtherPlayer().getType());
+            //board.undoMove(move, board.getOtherPlayer().getType());
             if(beta <= alpha)
                 break;
         }
@@ -136,24 +144,30 @@ public class Athena implements SliderPlayer {
     }
 
    // TODO: this is just a rudimentary utility function, make a real one
-    public double boardUtility(Board board)  {
+    public double boardUtility(Board board) {
         double score = 1;
         if(board.getPlayer().getType() == 'H') {
             for(Horizontal h : board.getHorizontalPieces())
             {
-                score += h.getXPos() * 0.25;
+                score += h.getXPos() * 10;
             }
+            score += (board.getN() - board.getHorizontalPieces().size() - 1) * 10 * board.getN() - 1;
             for (int i = 0; i < (board.getN() - board.getHorizontalPieces().size() - 1); i++)
-                score *= 10;
+                score += score * 200;
         }
         else if(board.getPlayer().getType() == 'V') {
             for(Vertical v : board.getVerticalPieces()) {
-                score += v.getYPos() * 0.25;
+                score += v.getYPos() * 10;
             }
+            score += (board.getN() - board.getVerticalPieces().size() - 1) * 10 * board.getN() - 1;
             for (int i = 0; i < (board.getN() - board.getVerticalPieces().size() - 1); i++)
-                score *= 10;
+                score += score * 200;
         }
 
+        // Taxing lateral moves
+        score += board.getPlayer().getNumLateralMoves() * (-300);
+        // Reward states where the other player is being blocked
+        score += board.getNumBlocked() * 50;
         return score;
     }
 

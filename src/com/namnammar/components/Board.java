@@ -11,7 +11,6 @@ package com.namnammar.components;
 import aiproj.slider.Move;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Scanner;
 
 import static aiproj.slider.Move.Direction.*;
@@ -33,7 +32,7 @@ public class Board
 
     private ArrayList<Horizontal> horizontalPieces = new ArrayList<>();
     private ArrayList<Vertical> verticalPieces = new ArrayList<>();
-    private ArrayList<Obstacle> obstacles = new ArrayList<>();
+    //private ArrayList<Obstacle> obstacles = new ArrayList<>();
 
     private Player player;
     private Player otherPlayer;
@@ -114,11 +113,11 @@ public class Board
                     verticalPieces.add(vertical);
                 }
 
-                else if (c == 'B')
+                /*else if (c == 'B')
                 {
                     Obstacle obs = new Obstacle(j, i);
                     obstacles.add(obs);
-                }
+                }*/
             }
         }
     }
@@ -162,7 +161,7 @@ public class Board
                       toRemove.add(mv);
                 }
             }
-                //player.removeMoves(toRemove);
+                player.removeMoves(toRemove);
             }
             else {
                 for(Move mv : otherPlayer.getLegalMoves())
@@ -171,7 +170,7 @@ public class Board
                         toRemove.add(mv);
                     }
                 }
-                //therPlayer.removeMoves(toRemove);
+                otherPlayer.removeMoves(toRemove);
             }
 
 
@@ -195,31 +194,34 @@ public class Board
 
         boardArray[row][col] = toMove;
 
+
+
         // update the moved piece's direction and coordinates
+        player.getLegalMoves().clear();
+        otherPlayer.getLegalMoves().clear();
         for (Piece h : horizontalPieces)
         {
-            if (Math.abs(h.getXPos() - moving.getXPos()) <= 2 ||
-                    Math.abs(h.getYPos() - moving.getYPos()) <= 2)
-                setHorizontalDir(h);
+            setHorizontalDir(h);
         }
 
         for (Piece v : verticalPieces)
         {
-            if (Math.abs(v.getXPos() - moving.getXPos()) <= 2 ||
-                    Math.abs(v.getYPos() - moving.getYPos()) <= 2)
-                setVerticalDir(v);
+            setVerticalDir(v);
         }
 
 
-        System.err.println("From undo:");
-        System.err.println(this);
-        System.err.println(player.getType() + " has " + player.getLegalMoves().size() + " moves. Ok. Bye.");
-        System.err.println(otherPlayer.getType() + " has " + otherPlayer.getLegalMoves().size() + " moves. Ok. Bye.");
+        //System.err.println("From undo:");
+        //System.err.println(this);
+        //System.err.println(player.getType() + " has " + player.getLegalMoves().size() + " moves. Ok. Bye.");
+        //System.err.println(otherPlayer.getType() + " has " + otherPlayer.getLegalMoves().size() + " moves. Ok. Bye.");
 
     }
 
     public void updateBoard(Move move)
     {
+        if (move == null)
+            return;
+
         int col = move.i;
         int row = move.j;
         int newRow = row;
@@ -304,18 +306,21 @@ public class Board
         for (Piece h : horizontalPieces)
         {
             setHorizontalDir(h);
-            /*if (Math.abs(h.getXPos() - moving.getXPos()) <= 2 ||
-                    Math.abs(h.getYPos() - moving.getYPos()) <= 2)
-                setHorizontalDir(h);*/
         }
 
         for (Piece v : verticalPieces)
         {
             setVerticalDir(v);
-            /*if (Math.abs(v.getXPos() - moving.getXPos()) <= 2 ||
-                    Math.abs(v.getYPos() - moving.getYPos()) <= 2)
-                setVerticalDir(v);*/
         }
+
+        // Updating the number of lateral moves of the player
+        if (this.getPlayer().getType() == 'H')
+            if (move.d == Move.Direction.UP || move.d == Move.Direction.DOWN)
+                this.getPlayer().setNumLateralMoves(this.getPlayer().getNumLateralMoves()+1);
+        else if (this.getPlayer().getType() == 'V')
+            if (move.d == Move.Direction.LEFT|| move.d == Move.Direction.RIGHT)
+                this.getPlayer().setNumLateralMoves(this.getPlayer().getNumLateralMoves()+1);
+
         System.err.println("From the end of update:");
         System.err.println(this);
         System.err.println(player.getType() + " has " + player.getLegalMoves().size() + " moves. Ok. Bye.");
@@ -538,11 +543,6 @@ public class Board
         return score;
     }
 
-    public int calculateUtilityDiff(Board oldBoard, Board newBoard)
-    {
-        return newBoard.utility() - oldBoard.utility();
-    }
-
     /**
      * Copy constructor for the board
      * @param other the source to be copied
@@ -556,14 +556,42 @@ public class Board
             this.horizontalPieces.add(new Horizontal(p));
         for (Vertical p : other.getVerticalPieces())
             this.verticalPieces.add(new Vertical(p));
-        this.otherPlayer = new Player(other.otherPlayer.getType());
-        this.player = new Player(other.player.getType());
+
+        // Copying all the data from the previous players of the other board
+        Player otherPlayer = new Player(other.getOtherPlayer().getType());
+        otherPlayer.setNumLateralMoves(other.getOtherPlayer().getNumLateralMoves());
+        this.otherPlayer = otherPlayer;
+
+        Player player = new Player(other.getPlayer().getType());
+        player.setNumLateralMoves(other.getPlayer().getNumLateralMoves());
+        this.player = player;
+
         this.n = other.getN();
         for (int i = 0; i < other.getN(); i++)
             for (int j = 0; j < other.getN(); j++)
                 this.boardArray[i][j] = other.boardArray[i][j];
 
-        this.obstacles = (ArrayList<Obstacle>) other.obstacles.clone();
+        //this.obstacles = (ArrayList<Obstacle>) other.obstacles.clone();
+    }
+
+    public int getNumBlocked ()
+    {
+        int numBlocked = 0;
+        for (int i = 0; i < n; i++)
+        {
+            for (int j = 0; j < n; j++)
+            {
+                if (player.getType() == 'H' && i > 0)
+                {
+                    if (boardArray[i-1][j] == 'V' && boardArray[i][j] == 'H')
+                        numBlocked += 1;
+                }
+                else if (player.getType() == 'V' && j > 0)
+                    if (boardArray[i][j-1] == 'H' && boardArray[i][j] == 'V')
+                        numBlocked += 1;
+            }
+        }
+        return numBlocked;
     }
     
     public String toString()
