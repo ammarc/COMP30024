@@ -20,7 +20,6 @@ public class Board
 {
     private int n;
     private char[][] boardArray;
-    private int utility;
 
     public ArrayList<Horizontal> getHorizontalPieces() {
         return horizontalPieces;
@@ -32,7 +31,6 @@ public class Board
 
     private ArrayList<Horizontal> horizontalPieces = new ArrayList<>();
     private ArrayList<Vertical> verticalPieces = new ArrayList<>();
-    //private ArrayList<Obstacle> obstacles = new ArrayList<>();
 
     private Player player;
     private Player otherPlayer;
@@ -112,12 +110,6 @@ public class Board
 
                     verticalPieces.add(vertical);
                 }
-
-                /*else if (c == 'B')
-                {
-                    Obstacle obs = new Obstacle(j, i);
-                    obstacles.add(obs);
-                }*/
             }
         }
     }
@@ -129,6 +121,8 @@ public class Board
         // newRow was 1 and column was 1.
         // Now when you want to undo 0, 1 up. You find newRow,
         // newColumn into a +
+
+
         int col = move.i;
         int row = move.j;
         int newRow = row;
@@ -146,75 +140,39 @@ public class Board
 
             default:              break;
         }
-        char toMove;
         Piece moving;
-        if(newRow < n && newCol < n) {
-            toMove = type;
+        boardArray[row][col] = type;
+
+        if(newRow < n && newCol < n)
+        {
             boardArray[newRow][newCol] = '+';
-            moving = findPiece(newCol, newRow, toMove);
+            moving = findPiece(newCol, newRow, type);
             moving.setCoordinates(col, row);
-            ArrayList<Move> toRemove = new ArrayList<>();
-
-            if(toMove == player.getType()) {
-                for(Move mv : player.getLegalMoves()) {
-                    if(mv.i == newCol && mv.j == newRow) {
-                      toRemove.add(mv);
-                }
-            }
-                player.removeMoves(toRemove);
-            }
-            else {
-                for(Move mv : otherPlayer.getLegalMoves())
-                {
-                    if(mv.i == newCol && mv.j == newRow) {
-                        toRemove.add(mv);
-                    }
-                }
-                otherPlayer.removeMoves(toRemove);
-            }
-
-
         }
-        else {
-            toMove = type;
-
-            if(type == 'H') {
-                moving = new Horizontal(col, row);
-                horizontalPieces.add((Horizontal) moving);
-            }
-            else {
-                moving = new Vertical(col, row);
-                verticalPieces.add((Vertical) moving);
-            }
+        else
+        {
+            if(type == 'H')
+                horizontalPieces.add(new Horizontal(col, row));
+            else
+                verticalPieces.add(new Vertical(col, row));
         }
-
-        // swap places of two cells on rawBoard
-
-        // Removing moves that have been made
-
-        boardArray[row][col] = toMove;
-
-
 
         // update the moved piece's direction and coordinates
         player.getLegalMoves().clear();
         otherPlayer.getLegalMoves().clear();
         for (Piece h : horizontalPieces)
-        {
             setHorizontalDir(h);
-        }
 
         for (Piece v : verticalPieces)
-        {
             setVerticalDir(v);
-        }
 
-
-        //System.err.println("From undo:");
-        //System.err.println(this);
-        //System.err.println(player.getType() + " has " + player.getLegalMoves().size() + " moves. Ok. Bye.");
-        //System.err.println(otherPlayer.getType() + " has " + otherPlayer.getLegalMoves().size() + " moves. Ok. Bye.");
-
+        // Undoing the lateral move count if a lateral move was made
+        if (this.getPlayer().getType() == 'H')
+            if (move.d == Move.Direction.UP || move.d == Move.Direction.DOWN)
+                this.getPlayer().setNumLateralMoves(this.getPlayer().getNumLateralMoves()-1);
+        else if (this.getPlayer().getType() == 'V')
+            if (move.d == Move.Direction.LEFT || move.d == Move.Direction.RIGHT)
+                this.getPlayer().setNumLateralMoves(this.getPlayer().getNumLateralMoves()-1);
     }
 
     public void updateBoard(Move move)
@@ -245,26 +203,6 @@ public class Board
         Piece moving = findPiece(col, row, toMove);
         boardArray[row][col] = '+';
 
-        // Removing moves that have been made
-        ArrayList<Move> toRemove = new ArrayList<>();
-        if(toMove == player.getType()) {
-            for(Move mv : player.getLegalMoves()) {
-                if(mv.i == col && mv.j == row) {
-                    toRemove.add(mv);
-                }
-            }
-            player.removeMoves(toRemove);
-        }
-        else {
-            for(Move mv : otherPlayer.getLegalMoves())
-            {
-                if(mv.i == col && mv.j == row) {
-                    toRemove.add(mv);
-                }
-            }
-            otherPlayer.removeMoves(toRemove);
-        }
-
         // Checks if the moves made were out of the board
         if (newRow >= n || newCol >= n)
         {
@@ -288,16 +226,6 @@ public class Board
         {
             boardArray[newRow][newCol] = toMove;
             moving.setCoordinates(newCol, newRow);
-            /*System.err.println(this);
-            System.err.println("--------------------------");
-            System.err.println("Setting coords for: "+col+ " " + row+" to "+newCol+ " " +newRow);
-            System.err.println("Vertical pieces are:");
-            for (Piece p : verticalPieces)
-                System.err.println(p);
-            System.err.println("Horizontal pieces are:");
-            for (Piece p : horizontalPieces)
-                System.err.println(p);
-            System.err.println("--------------------------");*/
         }
 
         // update the moved piece's direction and coordinates
@@ -318,26 +246,12 @@ public class Board
             if (move.d == Move.Direction.UP || move.d == Move.Direction.DOWN)
                 this.getPlayer().setNumLateralMoves(this.getPlayer().getNumLateralMoves()+1);
         else if (this.getPlayer().getType() == 'V')
-            if (move.d == Move.Direction.LEFT|| move.d == Move.Direction.RIGHT)
+            if (move.d == Move.Direction.LEFT || move.d == Move.Direction.RIGHT)
                 this.getPlayer().setNumLateralMoves(this.getPlayer().getNumLateralMoves()+1);
-
-        System.err.println("From the end of update:");
-        System.err.println(this);
-        System.err.println(player.getType() + " has " + player.getLegalMoves().size() + " moves. Ok. Bye.");
-        System.err.println(otherPlayer.getType() + " has " + otherPlayer.getLegalMoves().size() + " moves. Ok. Bye.");
-        System.err.println("--------------\n");
-
     }
 
     private Piece findPiece(int column, int row, char type)
     {
-        // System.err.println("Now finding piece: "+type+" "+column+" "+row);
-        // System.err.println("Vertical pieces are:");
-        // for (Piece p : verticalPieces)
-           // System.err.println(p);
-        // System.err.println("Horizontal pieces are:");
-        //for (Piece p : horizontalPieces)
-          //  System.err.println(p);
         if (type == 'H')
         {
             for (Piece h : this.horizontalPieces) {
@@ -375,9 +289,7 @@ public class Board
         }
 
         else
-        {
             horizontal.setDownFalse();
-        }
 
         // Looking right
         if (i < n - 1 && boardArray[j][i+1] == '+')
@@ -393,9 +305,7 @@ public class Board
         }
 
         else
-        {
             horizontal.setRightFalse();
-        }
 
         // Looking up
         if (j < n - 1 && boardArray[j+1][i] == '+')
@@ -405,9 +315,7 @@ public class Board
         }
 
         else
-        {
             horizontal.setUpFalse();
-        }
 
         if (player.getType() == 'H')
         {
@@ -442,9 +350,7 @@ public class Board
         }
 
         else
-        {
             vertical.setUpFalse();
-        }
 
         // Looking right
         if (i < n - 1 && boardArray[j][i+1] == '+')
@@ -454,9 +360,7 @@ public class Board
         }
 
         else
-        {
             vertical.setRightFalse();
-        }
 
 
         // Looking left
@@ -467,9 +371,7 @@ public class Board
         }
 
         else
-        {
             vertical.setLeftFalse();
-        }
 
         if (player.getType() == 'V')
         {
@@ -480,41 +382,6 @@ public class Board
             otherPlayer.addMoves(newMoves);
         }
     }
-
-    /**
-     * Calculates the number of total horizontal legal moves
-     * by first setting them for the piece and adding it to total
-     * @return number of legal horizontal moves
-     */
-    public int numLegalHMoves()
-    {
-        int count = 0;
-
-        for( Piece p : horizontalPieces)
-        {
-            p.setLegalMoves();
-            count += p.getNumLegalMoves();
-        }
-        return count;
-    }
-
-    /**
-     * Calculates the number of total vertical legal moves
-     * by first setting them for the piece and adding it to total
-     * @return number of legal vertical moves
-     */
-    public int numLegalVMoves()
-    {
-        int count = 0;
-
-        for (Piece p : verticalPieces)
-        {
-            p.setLegalMoves();
-            count += p.getNumLegalMoves();
-        }
-        return count;
-    }
-
 
     // TODO: there are more terminal states of the rawBoard
     public boolean isTerminal()
@@ -552,8 +419,6 @@ public class Board
         for (int i = 0; i < other.getN(); i++)
             for (int j = 0; j < other.getN(); j++)
                 this.boardArray[i][j] = other.boardArray[i][j];
-
-        //this.obstacles = (ArrayList<Obstacle>) other.obstacles.clone();
     }
 
     public int getNumBlocked ()
@@ -564,10 +429,8 @@ public class Board
             for (int j = 0; j < n; j++)
             {
                 if (player.getType() == 'H' && i > 0)
-                {
                     if (boardArray[i-1][j] == 'V' && boardArray[i][j] == 'H')
                         numBlocked += 1;
-                }
                 else if (player.getType() == 'V' && j > 0)
                     if (boardArray[i][j-1] == 'H' && boardArray[i][j] == 'V')
                         numBlocked += 1;

@@ -15,10 +15,14 @@ public class Player
     {
         this.type = player;
         legalMoves = new ArrayList<>();
+        this.numLateralMoves = 0;
     }
 
-    public void setNumLateralMoves(int numLateralMoves) {
+    public void setNumLateralMoves(int numLateralMoves)
+    {
         this.numLateralMoves = numLateralMoves;
+        if (numLateralMoves < 0)
+            this.numLateralMoves = 0;
     }
 
     public int getNumLateralMoves() {
@@ -29,14 +33,6 @@ public class Player
 
     public ArrayList<Move> getLegalMoves()
     {
-        /*ArrayList<Move> toReturn = new ArrayList<>();
-        for (Move move : legalMoves)
-            if (move.d == Move.Direction.RIGHT && type == 'H')
-                toReturn.add(move);
-            else if (move.d == Move.Direction.UP && type == 'V')
-                toReturn.add(move);
-        if (!toReturn.isEmpty())
-            return toReturn;*/
         return legalMoves;
     }
 
@@ -44,14 +40,5 @@ public class Player
     {
         for (Move move : moves)
             legalMoves.add(move);
-    }
-
-
-    public void removeMoves(ArrayList<Move> removals)
-    {
-        for(Move move : removals)
-        {
-            legalMoves.remove(move);
-        }
     }
 }
