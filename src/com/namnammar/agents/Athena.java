@@ -1,4 +1,5 @@
-package com.namnammar.agents; /**
+package com.namnammar.agents;
+/**
  * Made by Ammar Ahmed and Nam Nguyen
  * Student IDs: Ammar 728926, Nam 718604
  * User names: Ammar - ammara, Nam - namn1
@@ -20,6 +21,14 @@ public class Athena implements SliderPlayer
 
     private static double currentBoardScore;
 
+    /**
+     *  Our implementation of the init method, where we keep track of the
+     *  current score and create a new board for the agent
+     * @param dimension The width and height of the board in cells
+     * @param board A string representation of the initial state of the board,
+     * as described in the part B specification
+     * @param player 'H' or 'V', corresponding to which pieces the player will
+     */
     @Override
     public void init(int dimension, String board, char player)
     {
@@ -27,18 +36,25 @@ public class Athena implements SliderPlayer
         currentBoardScore = boardUtility(this.board);
     }
 
+    /**
+     * The board and the current score of the board is updated for our agent
+     * @param move A Move object representing the previous move made by the
+     * opponent, which may be null (indicating a pass). Also, before the first
+     */
     @Override
     public void update(Move move)
     {
         if (move != null)
         {
-            //System.err.println("The other player made :" + move);
             this.board.updateBoard(move);
             currentBoardScore = boardUtility(board);
-            //System.err.println("FROM THE OTHER GUY\n" + board);
         }
     }
 
+    /**
+     * We apply our alpha beta here and return the move accordingly
+     * @return the next move to be made by our agent
+     */
     @Override
     public Move move()
     {
@@ -69,8 +85,9 @@ public class Athena implements SliderPlayer
 
 
     /**
-     * Here Alpha-Beta pruning is applied to get the next move
-     *
+     * Here Alpha-Beta pruning is applied to get the next move. We call
+     * max directly from here so that we can keep track of the best move
+     * we find and the board with the best utility during our search
      * @return the next move the agent should make
      */
     protected Move alphaBeta(Board board, int depth, double alpha, double beta)
@@ -111,6 +128,7 @@ public class Athena implements SliderPlayer
         }
         return maxMove;
     }
+
     /**
      * Recursive function to get max utility for this player
      * @return max utility
@@ -201,8 +219,8 @@ public class Athena implements SliderPlayer
                 score += score * 200;
         }
 
-//        // Taxing lateral moves
-//        score += board.getPlayer().getNumLateralMoves() * (-5000);
+        // Taxing lateral moves heavily as they usually cost the player the game
+        score += board.getPlayer().getNumLateralMoves() * (-5000);
         // Reward states where the other player is being blocked
         score += board.getNumBlocked() * 500;
 

@@ -4,7 +4,7 @@ package com.namnammar.components;
  * Made by Ammar Ahmed and Nam Nguyen
  * Student IDs: Ammar 728926, Nam 718604
  * User names: Ammar - amamra, Nam - namn1
- * For COMP30024 Part A
+ * For COMP30024 Part B
  */
 
 
@@ -53,7 +53,6 @@ public class Board
      * @param dimension Dimension of board
      * @param player character representation of my player (either H or V)
      */
-
     public Board (String rawBoard, int dimension, char player)
     {
         Scanner in = new Scanner (rawBoard);
@@ -331,6 +330,7 @@ public class Board
         else
             horizontal.setUpFalse();
 
+        // Adding all the moves possible to the player
         if (player.getType() == 'H')
         {
             player.addMoves(newMoves);
@@ -390,6 +390,7 @@ public class Board
         else
             vertical.setLeftFalse();
 
+        // Adding all the moves possible for the vertical player
         if (player.getType() == 'V')
         {
             player.addMoves(newMoves);
@@ -402,7 +403,7 @@ public class Board
 
     /**
      * check if game has ended
-     * @return
+     * @return true if the board is at a terminal state, false otherwise
      */
     public boolean isTerminal()
     {

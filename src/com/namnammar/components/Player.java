@@ -1,4 +1,11 @@
 package com.namnammar.components;
+/**
+ * Made by Ammar Ahmed and Nam Nguyen
+ * Student IDs: Ammar 728926, Nam 718604
+ * User names: Ammar - ammara, Nam - namn1
+ * For COMP30024 Part B
+ */
+
 
 import aiproj.slider.Move;
 

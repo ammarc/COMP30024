@@ -4,7 +4,7 @@ package com.namnammar.components;
  * Made by Ammar Ahmed and Nam Nguyen
  * Student IDs: Ammar 728926, Nam 718604
  * User names: Ammar - amamra, Nam - namn1
- * For COMP30024 Part A
+ * For COMP30024 Part B
  */
 
 public class Horizontal extends Piece
