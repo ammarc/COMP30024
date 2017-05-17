@@ -22,6 +22,9 @@ public class Me implements SliderPlayer {
         }
     }
 
+    /**
+     * Human-controlled player, reads in input and move accordingly
+     */
     public Move move() {
         System.out.println("C   R   Direction");
         Scanner in = new Scanner(System.in);

@@ -24,6 +24,9 @@ public class Simple implements SliderPlayer
         }
     }
 
+    /**
+     * Simple agent, try all moves possible
+     */
     public Move move() {
 
         if (board.getPlayer().getType() == 'H')

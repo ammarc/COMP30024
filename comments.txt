@@ -1,0 +1,51 @@
+Comment file for Part B submission by Ammar Ahmed and Nam Nguyen.
+
+|----------------------------|
+| Package Structure:         |
+|----------------------------|
+com
+ |---namnammar
+     |---agents
+         |--- Athena                    Main Playing Agent, using Alpha Beta algorithm with pre-defined max depth
+         |--- Me                        Supporting Agent, get moves from user input
+         |--- Simple                    Supporting Agent, try all moves in order
+     |---components
+         |--- Board                     Board class, using 2D arrays
+         |--- Horizontal                Class for Horizontal Pieces
+         |--- Piece                     Parent class representation of a piece
+         |--- Player                    Class for Player
+         |--- Vertical                  Class for Horizontal Pieces
+
+|----------------------------|
+| Implementation             |
+|----------------------------|
+
+Athena, our AI playing agent, is implemented using Alpha-Beta Pruning with pre-defined maximum depth.
+
+So at every stage of the game, when move is requested from Athena, all legal moves of the player is tested using
+minimax strategy with pruning. Lookahead moves are stopped from being evaluated/expanded if the utility value of Board
+at that stage is smaller than a previously examined move by storing the values in alpha and beta. Beta is the minimum
+value of last beta and min value at that node. Similarly the same applies for alpha.
+
+Worst case scenario of this algorithm is O(b^d) where b is the branching factor and d is the depth of the tree.
+Like defined in the algorithm, for board of dimension 6 or 7, depth d is set at 8 to satisfy time constraints (30s)
+of the assignment.
+Maximum b is 3(n-1), as there are maximum (n-1) pieces that the player controls, and each piece has maximum 3 moves.
+--> worst case scenario is O(n^8)
+
+Best case scenario is O(n^4) when the moves ordering is optimal.
+
+We tried to implement sorting of moves at the initial level, but didn't significantly improve the performance of the
+algorithm, so that means that our heuristics in ordering is not good.
+
+|----------------------------|
+| Heuristics                 |
+|----------------------------|
+
+Our evaluation function of a board state takes into account the following conditions, and weigh them differently:
+
++ number of pieces left of the player
++ the position of each piece (how close they are to the edge to move off)
++ whether any opponent piece is blocked
+
+The weight of each factor is derived through experiments and trials of running the algorithm against the Simple Agent.

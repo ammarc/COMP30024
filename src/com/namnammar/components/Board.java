@@ -10,6 +10,7 @@ package com.namnammar.components;
 
 import aiproj.slider.Move;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -32,6 +33,7 @@ public class Board
     private ArrayList<Horizontal> horizontalPieces = new ArrayList<>();
     private ArrayList<Vertical> verticalPieces = new ArrayList<>();
 
+    // store both players
     private Player player;
     private Player otherPlayer;
 
@@ -45,6 +47,13 @@ public class Board
 
     public int getN() { return this.n; }
 
+    /**
+     * Constructor for Board
+     * @param rawBoard String representation of board, provided by the Referee
+     * @param dimension Dimension of board
+     * @param player character representation of my player (either H or V)
+     */
+
     public Board (String rawBoard, int dimension, char player)
     {
         Scanner in = new Scanner (rawBoard);
@@ -55,7 +64,9 @@ public class Board
         for(int i = 0; i < dimension; i++)
             boardArray[i] = new char[dimension];
 
-        /** Removing the spaces and adding to our rawBoard */
+        /** Removing the spaces and adding to our rawBoard
+         * reading from last row of string as board start from bottom left
+         * */
         for (int i = dimension - 1; i >= 0; i--)
         {
             String nextString = in.nextLine();
@@ -77,6 +88,7 @@ public class Board
         }
 
         this.n = dimension;
+        // set direction of all Pieces
         this.setUpPieces();
     }
 
@@ -114,6 +126,11 @@ public class Board
         }
     }
 
+    /**
+     * Undo the provided move
+     * @param move Move to undo
+     * @param type which player made the move
+     */
     public void undoMove(Move move, char type)
     {
 
@@ -122,33 +139,26 @@ public class Board
         // Now when you want to undo 0, 1 up. You find newRow,
         // newColumn into a +
 
-
         int col = move.i;
         int row = move.j;
-        int newRow = row;
-        int newCol = col;
 
-        switch (move.d)
-        {
-            case UP:    newRow++; break;
+        //get new coordinates set based on move direction
+        Point new_coor = findCoordinates(move.d, row, col);
+        int newCol = new_coor.x;
+        int newRow = new_coor.y;
 
-            case DOWN:  newRow--; break;
-
-            case LEFT:  newCol--; break;
-
-            case RIGHT: newCol++; break;
-
-            default:              break;
-        }
         Piece moving;
+        //assign Piece to old board cell
         boardArray[row][col] = type;
-
+        //make the Board cell available again if Piece didn't move off the board
         if(newRow < n && newCol < n)
         {
             boardArray[newRow][newCol] = '+';
             moving = findPiece(newCol, newRow, type);
+            //reset coordinates of piece
             moving.setCoordinates(col, row);
         }
+        //otherwise add Piece back to array
         else
         {
             if(type == 'H')
@@ -175,6 +185,10 @@ public class Board
                 this.getPlayer().setNumLateralMoves(this.getPlayer().getNumLateralMoves()-1);
     }
 
+    /**
+     * Update board given move
+     * @param move Move made by a player
+     */
     public void updateBoard(Move move)
     {
         if (move == null)
@@ -182,21 +196,10 @@ public class Board
 
         int col = move.i;
         int row = move.j;
-        int newRow = row;
-        int newCol = col;
 
-        switch (move.d)
-        {
-            case UP:    newRow++; break;
-
-            case DOWN:  newRow--; break;
-
-            case LEFT:  newCol--; break;
-
-            case RIGHT: newCol++; break;
-
-            default:              break;
-        }
+        Point new_coor = findCoordinates(move.d, row, col);
+        int newCol = new_coor.x;
+        int newRow = new_coor.y;
 
         char toMove = boardArray[row][col];
         // swap places of two cells on rawBoard
@@ -207,6 +210,7 @@ public class Board
         if (newRow >= n || newCol >= n)
         {
             Piece pieceToBeRemoved = null;
+            // remove Piece that just moved off from array
             if (toMove == 'H')
             {
                 for (Piece h : horizontalPieces)
@@ -250,6 +254,13 @@ public class Board
                 this.getPlayer().setNumLateralMoves(this.getPlayer().getNumLateralMoves()+1);
     }
 
+    /**
+     * Find the appropriate piece from arrays according to coordinates
+     * @param column col index
+     * @param row row index
+     * @param type type of player
+     * @return
+     */
     private Piece findPiece(int column, int row, char type)
     {
         if (type == 'H')
@@ -274,7 +285,10 @@ public class Board
         return null;
     }
 
-    // TODO: Code duplication in both these methods
+    /**
+     * Look in all possible direction and set value accordingly
+     * @param horizontal piece to set direction
+     */
     private void setHorizontalDir(Piece horizontal)
     {
         int i = horizontal.getXPos();
@@ -329,7 +343,10 @@ public class Board
         }
     }
 
-    // TODO: Code duplication in both these methods
+    /**
+     * Look in all possible direction and set value accordingly
+     * @param vertical piece to set direction
+     */
     private void setVerticalDir(Piece vertical)
     {
         int i = vertical.getXPos();
@@ -383,11 +400,20 @@ public class Board
         }
     }
 
-    // TODO: there are more terminal states of the rawBoard
+    /**
+     * check if game has ended
+     * @return
+     */
     public boolean isTerminal()
     {
-        if (horizontalPieces.size() == 0 || verticalPieces.size() == 0)
+        //if either player has moved all pieces off the board
+        if (horizontalPieces.size() == 0 || verticalPieces.size() == 0){
             return true;
+        }
+        //if neither player has any moves
+        if (this.player.getNumMoves() == 0 && this.otherPlayer.getNumMoves() == 0){
+            return true;
+        }
 
         return false;
     }
@@ -421,6 +447,9 @@ public class Board
                 this.boardArray[i][j] = other.boardArray[i][j];
     }
 
+    /**
+     * @return number of opponent's pieces blocked
+     */
     public int getNumBlocked ()
     {
         int numBlocked = 0;
@@ -438,7 +467,7 @@ public class Board
         }
         return numBlocked;
     }
-    
+
     public String toString()
     {
         String str = "\n--------The Board--------\n";
@@ -449,5 +478,25 @@ public class Board
             str += "\n";
         }
         return str;
+    }
+
+    /**
+     * @return Point object that consists of column and row coordinates of where the piece to moving to
+     */
+    private Point findCoordinates(Move.Direction d, int newRow, int newCol){
+        switch (d)
+        {
+            case UP:    newRow++; break;
+
+            case DOWN:  newRow--; break;
+
+            case LEFT:  newCol--; break;
+
+            case RIGHT: newCol++; break;
+
+            default:              break;
+        }
+
+        return new Point(newCol, newRow);
     }
 }

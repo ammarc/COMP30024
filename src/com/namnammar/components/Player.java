@@ -6,8 +6,9 @@ import java.util.ArrayList;
 
 public class Player
 {
-    // pieces that the player && opponentPieces controls
+    // all legal moves of this player
     private ArrayList<Move> legalMoves;
+    // player type, either H or V
     private char type;
     private int numLateralMoves;
 
@@ -36,9 +37,13 @@ public class Player
         return legalMoves;
     }
 
+    public int getNumMoves(){ return legalMoves.size();};
+
+    //add moves to internal memory structure
     public void addMoves(ArrayList<Move> moves)
     {
         for (Move move : moves)
             legalMoves.add(move);
     }
+
 }
