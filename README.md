@@ -1,11 +1,11 @@
-# Slider Game Agent
+# Slider Game-Playing Agent
 This repository contains a game-playing AI for the game of Slider. The agent was implemented
 by Ammar and Nam for the Artificial Intelligence subject (COMP30024), at the University of
 Melbourne, during Semester 1, 2017.
 
 
 
-## Package Structure:
+## Package Structure
 ```
 com
  |---namnammar
