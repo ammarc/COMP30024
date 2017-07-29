@@ -6,7 +6,7 @@ Melbourne, during Semester 1, 2017.
 
 
 ## Package Structure:
-
+```
 com
  |---namnammar
      |---agents
@@ -19,7 +19,7 @@ com
          |--- Piece                     Parent class representation of a piece
          |--- Player                    Class for Player
          |--- Vertical                  Class for Horizontal Pieces
-
+```
 ## Implementation
 
 Athena, our AI playing agent, is implemented using Alpha-Beta Pruning with pre-defined maximum depth.
